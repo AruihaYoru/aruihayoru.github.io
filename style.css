@@ -1,87 +1,237 @@
-/* --- 基本設定とデザイン変数 --- */
+/* --- 基本設定 & 変数 --- */
 :root {
-    --bg-color: #121212;
-    --surface-color: #1e1e1e;
-    --primary-color: #bb86fc;
-    --secondary-color: #03dac6;
-    --text-color: #e0e0e0;
-    --font-family-jp: 'Noto Sans JP', sans-serif;
-    --font-family-en: 'Poppins', sans-serif;
+    --color-bg: #0d1117; 
+    --color-primary: #0d1a31;
+    --color-secondary: #0f343b;
+    --color-text: #c9d1d9;
+    --color-accent: #58a6ff;
+    --color-accent-green: #34d399;
+    --color-border: rgba(139, 148, 158, 0.3);
+    --color-card-bg: rgba(22, 27, 34, 0.8);
+    --font-heading: 'Bebas Neue', cursive;
+    --font-body: 'Noto Sans JP', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
 }
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: var(--font-family-jp);
-    margin: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
     line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    background-image: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+    background-size: 200% 200%;
+    background-attachment: fixed;
+    animation: gradient-animation 15s ease infinite;
 }
 
-/* --- ヘッダー --- */
-.hero {
-    min-height: 40vh;
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- ヒーローセクション --- */
+.hero-section {
+    height: 100vh;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    background: linear-gradient(45deg, rgba(187, 134, 252, 0.15), rgba(3, 218, 198, 0.15)), 
-                radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-    padding: 2rem;
-    animation: fadeIn 1s ease-in-out;
+    position: relative; 
 }
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+        linear-gradient(rgba(52, 211, 153, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(52, 211, 153, 0.07) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.5;
+    animation: grid-pan 15s linear infinite;
+}
+@keyframes grid-pan {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+}
+.hero-content { z-index: 1; }
 .hero-title {
-    font-family: var(--font-family-en);
-    font-size: clamp(2.5rem, 8vw, 4rem); /* 画面サイズで文字サイズ変更 */
-    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(4rem, 6rem, 10rem);
+    letter-spacing: 0.1em;
     color: #fff;
-    text-shadow: 0 0 20px rgba(187, 134, 252, 0.5);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    position: relative;
 }
 .hero-subtitle {
+    font-family: var(--font-mono);
     font-size: clamp(1rem, 4vw, 1.5rem);
-    color: #ccc;
-    margin: 0.5rem 0 0;
+    opacity: 0.8;
 }
 
-/* --- コンテンツ --- */
-.container { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+/* --- 共通セクションスタイル --- */
+main { background-color: var(--color-bg); }
+.page-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 120px 20px;
+    position: relative;
+    z-index: 1;
+}
+.page-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 100%;
+    background: rgba(13, 17, 23, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--color-border);
+    z-index: -1;
+}
 .section-title {
+    font-family: var(--font-heading);
+    font-size: 4rem;
     text-align: center;
-    font-family: var(--font-family-en);
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: var(--primary-color);
-}
-.section-title::after {
-    content: ''; display: block; width: 60px; height: 4px;
-    background: var(--secondary-color); margin: 0.5rem auto 0; border-radius: 2px;
+    margin-bottom: 60px;
+    color: var(--color-accent-green);
+    letter-spacing: 2px;
+    position: relative;
 }
 
-/* --- 作品カード --- */
-.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+/* --- セクションごとの図形 (clip-path) --- */
+#projects::before { clip-path: polygon(0 5%, 100% 0, 100% 95%, 0% 100%); }
+#lab::before { clip-path: polygon(0% 0%, 100% 0%, 95% 50%, 100% 100%, 0% 100%, 5% 50%); }
+#inspirations::before { clip-path: polygon(5% 0, 95% 0, 100% 100%, 0% 100%); }
+#about::before { clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%); }
+
+/* --- 各コンポーネント --- */
 .project-card {
-    background-color: var(--surface-color);
+    background-color: var(--color-card-bg);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 40px;
+    border: 1px solid var(--color-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
-.project-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 30px rgba(3, 218, 198, 0.3); }
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(88, 166, 255, 0.3);
+    border-color: var(--color-accent);
+}
 .card-link { display: block; text-decoration: none; color: inherit; }
-.card-image { width: 100%; height: 200px; object-fit: cover; display: block; transition: transform 0.3s ease; }
-.project-card:hover .card-image { transform: scale(1.05); }
-.card-content { padding: 1.5rem; }
-.card-title { margin: 0 0 0.5rem; font-size: 1.5rem; color: var(--primary-color); }
-.card-description { margin: 0 0 1rem; font-size: 0.95rem; color: #bbb; }
-.card-tag { display: inline-block; background-color: rgba(3, 218, 198, 0.1); color: var(--secondary-color); padding: 0.25em 0.75em; border-radius: 15px; font-size: 0.8rem; margin: 0.5em 0.5em 0 0; }
+.card-content { padding: 30px; }
+.card-title { font-size: 2rem; margin-bottom: 10px; color: #fff; }
+.card-description { margin-bottom: 20px; font-weight: 300; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.card-tag {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
 
-/* --- フッター --- */
-.footer { text-align: center; padding: 2rem; background-color: #000; color: #888; font-size: 0.9rem; }
+.lab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+.lab-item {
+    background-color: rgba(30, 38, 48, 0.7);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 25px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+.lab-item:hover {
+    background-color: var(--color-card-bg);
+    border-color: var(--color-accent-green);
+}
+.lab-title { font-size: 1.5rem; color: var(--color-accent-green); margin-bottom: 10px; }
+.lab-description { font-size: 0.9rem; margin-bottom: 15px; }
+.lab-link { color: var(--color-accent); text-decoration: none; font-weight: bold; font-family: var(--font-mono); }
+.lab-link:hover { text-decoration: underline; }
 
-/* --- アニメーション設定 --- */
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-/* JSで制御するアニメーション用クラス */
-.animate-target { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+.inspiration-list { display: flex; flex-direction: column; gap: 30px; }
+.inspiration-item {
+    border-left: 3px solid var(--color-border);
+    padding: 15px 25px;
+    transition: border-color 0.3s, background-color 0.3s;
+    border-radius: 0 8px 8px 0;
+}
+.inspiration-item:hover { border-color: var(--color-accent); background-color: rgba(30, 38, 48, 0.7); }
+.inspiration-category { font-family: var(--font-mono); color: var(--color-accent); font-size: 0.9rem; display: block; margin-bottom: 5px; }
+.inspiration-title { font-size: 1.8rem; color: #fff; margin-bottom: 5px; }
+.inspiration-comment { font-weight: 300; }
+
+.about-content { max-width: 700px; margin: 0 auto; text-align: center; }
+.about-content h3 { font-size: 2rem; color: #fff; margin-bottom: 15px; position: relative; }
+.about-links { margin-top: 30px; display: flex; justify-content: center; gap: 30px; }
+.about-links a { color: var(--color-accent-green); text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: color 0.3s ease; }
+.about-links a:hover { color: #fff; }
+
+/* --- スクロールアニメーション --- */
+.animate-target {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
 .animate-target.is-visible { opacity: 1; transform: translateY(0); }
+
+/* --- 汎用グリッチエフェクト --- */
+.glitch.is-glitching {
+    position: relative; /* グリッチ中だけ適用 */
+}
+.glitch.is-glitching::before,
+.glitch.is-glitching::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: var(--color-bg); /* 背景に合わせる */
+    overflow: hidden;
+    
+    --glitch-offset-x: 2px;
+    --glitch-offset-y: 2px;
+}
+.glitch.is-glitching::before {
+    text-shadow: calc(var(--glitch-offset-x) * -1) 0 #ff00c1;
+}
+.glitch.is-glitching::after {
+    text-shadow: var(--glitch-offset-x) 0 #00fff9;
+}
+
+/* --- タイプ1: スキャンライングリッチ --- */
+.glitch.glitch-type-scan::before,
+.glitch.glitch-type-scan::after {
+    animation: glitch-anim-scan 1s infinite linear alternate-reverse;
+}
+@keyframes glitch-anim-scan {
+    0% { clip-path: inset(34% 0 33% 0); } 5% { clip-path: inset(55% 0 17% 0); } 10% { clip-path: inset(99% 0 1% 0); } 15% { clip-path: inset(93% 0 3% 0); } 20% { clip-path: inset(21% 0 74% 0); } 25% { clip-path: inset(3% 0 94% 0); } 30% { clip-path: inset(71% 0 25% 0); } 35% { clip-path: inset(18% 0 78% 0); } 40% { clip-path: inset(88% 0 1% 0); } 45% { clip-path: inset(45% 0 46% 0); } 50% { clip-path: inset(34% 0 57% 0); } 55% { clip-path: inset(99% 0 1% 0); } 60% { clip-path: inset(62% 0 31% 0); } 65% { clip-path: inset(2% 0 92% 0); } 70% { clip-path: inset(88% 0 3% 0); } 75% { clip-path: inset(49% 0 43% 0); } 80% { clip-path: inset(77% 0 14% 0); } 85% { clip-path: inset(29% 0 36% 0); } 90% { clip-path: inset(9% 0 88% 0); } 95% { clip-path: inset(84% 0 4% 0); } 100% { clip-path: inset(39% 0 48% 0); }
+}
+
+/* --- タイプ2: 横揺れグリッチ (追加) --- */
+.glitch.glitch-type-shake::before {
+    animation: glitch-anim-shake 0.2s infinite linear;
+}
+.glitch.glitch-type-shake::after {
+    animation: glitch-anim-shake 0.2s infinite linear reverse;
+}
+@keyframes glitch-anim-shake {
+    0% { transform: translate(calc(var(--glitch-offset-x) * -1), 0); }
+    25% { transform: translate(var(--glitch-offset-x), 0); }
+    50% { transform: translate(calc(var(--glitch-offset-x) * -0.5), 0); }
+    75% { transform: translate(var(--glitch-offset-x), 0); }
+    100% { transform: translate(calc(var(--glitch-offset-x) * -1), 0); }
+}
