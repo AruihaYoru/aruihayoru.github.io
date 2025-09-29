@@ -74,10 +74,11 @@ body {
 }
 
 /* --- 共通セクションスタイル --- */
-main { background-color: var(--color-bg); }
+main { 
+    background: rgba(13, 17, 23, 0.1);
+}
 .page-section {
     width: 100%;
-    max-width: 900px;
     margin: 0 auto;
     padding: 120px 20px;
     position: relative;
@@ -91,11 +92,13 @@ main { background-color: var(--color-bg); }
     transform: translateX(-50%);
     width: 120%;
     height: 100%;
-    background: rgba(13, 17, 23, 0.5);
+    /* 基本の背景色を設定。下のセクションで上書きしていく */
+    background: rgba(13, 17, 23, 0.4);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--color-border);
     z-index: -1;
+    transition: background-color 0.3s ease; /* ホバー時のためにトランジションを追加 */
 }
 .section-title {
     font-family: var(--font-heading);
@@ -107,11 +110,26 @@ main { background-color: var(--color-bg); }
     position: relative;
 }
 
-/* --- セクションごとの図形 (clip-path) --- */
-#projects::before { clip-path: polygon(0 5%, 100% 0, 100% 95%, 0% 100%); }
-#lab::before { clip-path: polygon(0% 0%, 100% 0%, 95% 50%, 100% 100%, 0% 100%, 5% 50%); }
-#inspirations::before { clip-path: polygon(5% 0, 95% 0, 100% 100%, 0% 100%); }
-#about::before { clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%); }
+
+/* --- セクションごとの設定 --- */
+#projects, #lab, #about, #inspirations {
+	margin-bottom:20px;
+}
+
+/* --- セクションごとの背景の暗さ調整 --- */
+#projects::before {
+    background: rgba(13, 17, 23, 0.2); /* ベースの明るさ */
+}
+#lab::before {
+    background: rgba(13, 17, 23, 0.3); /* 少し暗く */
+}
+#about::before {
+    background: rgba(13, 17, 23, 0.35); /* さらに暗く */
+}
+#inspirations::before {
+    background: rgba(13, 17, 23, 0.4); /* 最も暗く */
+}
+
 
 /* --- 各コンポーネント --- */
 .project-card {
@@ -175,7 +193,7 @@ main { background-color: var(--color-bg); }
 .inspiration-title { font-size: 1.8rem; color: #fff; margin-bottom: 5px; }
 .inspiration-comment { font-weight: 300; }
 
-.about-content { max-width: 700px; margin: 0 auto; text-align: center; }
+.about-content { margin: 0 auto; text-align: center; }
 .about-content h3 { font-size: 2rem; color: #fff; margin-bottom: 15px; position: relative; }
 .about-links { margin-top: 30px; display: flex; justify-content: center; gap: 30px; }
 .about-links a { color: var(--color-accent-green); text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: color 0.3s ease; }
@@ -184,54 +202,173 @@ main { background-color: var(--color-bg); }
 /* --- スクロールアニメーション --- */
 .animate-target {
     opacity: 0;
-    transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
-.animate-target.is-visible { opacity: 1; transform: translateY(0); }
 
-/* --- 汎用グリッチエフェクト --- */
-.glitch.is-glitching {
-    position: relative; /* グリッチ中だけ適用 */
-}
-.glitch.is-glitching::before,
-.glitch.is-glitching::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: var(--color-bg); /* 背景に合わせる */
-    overflow: hidden;
-    
-    --glitch-offset-x: 2px;
-    --glitch-offset-y: 2px;
-}
-.glitch.is-glitching::before {
-    text-shadow: calc(var(--glitch-offset-x) * -1) 0 #ff00c1;
-}
-.glitch.is-glitching::after {
-    text-shadow: var(--glitch-offset-x) 0 #00fff9;
+/* 下から表示される要素の初期位置 */
+.animate-target.from-bottom {
+    transform: translateY(40px);
 }
 
-/* --- タイプ1: スキャンライングリッチ --- */
-.glitch.glitch-type-scan::before,
-.glitch.glitch-type-scan::after {
-    animation: glitch-anim-scan 1s infinite linear alternate-reverse;
-}
-@keyframes glitch-anim-scan {
-    0% { clip-path: inset(34% 0 33% 0); } 5% { clip-path: inset(55% 0 17% 0); } 10% { clip-path: inset(99% 0 1% 0); } 15% { clip-path: inset(93% 0 3% 0); } 20% { clip-path: inset(21% 0 74% 0); } 25% { clip-path: inset(3% 0 94% 0); } 30% { clip-path: inset(71% 0 25% 0); } 35% { clip-path: inset(18% 0 78% 0); } 40% { clip-path: inset(88% 0 1% 0); } 45% { clip-path: inset(45% 0 46% 0); } 50% { clip-path: inset(34% 0 57% 0); } 55% { clip-path: inset(99% 0 1% 0); } 60% { clip-path: inset(62% 0 31% 0); } 65% { clip-path: inset(2% 0 92% 0); } 70% { clip-path: inset(88% 0 3% 0); } 75% { clip-path: inset(49% 0 43% 0); } 80% { clip-path: inset(77% 0 14% 0); } 85% { clip-path: inset(29% 0 36% 0); } 90% { clip-path: inset(9% 0 88% 0); } 95% { clip-path: inset(84% 0 4% 0); } 100% { clip-path: inset(39% 0 48% 0); }
+/* 上から表示される要素の初期位置 */
+.animate-target.from-top {
+    transform: translateY(-40px);
 }
 
-/* --- タイプ2: 横揺れグリッチ (追加) --- */
-.glitch.glitch-type-shake::before {
-    animation: glitch-anim-shake 0.2s infinite linear;
+/* 画面内に入ったときの最終的な位置 */
+.animate-target.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
-.glitch.glitch-type-shake::after {
-    animation: glitch-anim-shake 0.2s infinite linear reverse;
+
+
+/* --- ゲストブックセクション --- */
+#guestbook::before {
+    clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+    background: rgba(13, 17, 23, 0.70); /* aboutとinspirationsの中間の暗さ */
 }
-@keyframes glitch-anim-shake {
-    0% { transform: translate(calc(var(--glitch-offset-x) * -1), 0); }
-    25% { transform: translate(var(--glitch-offset-x), 0); }
-    50% { transform: translate(calc(var(--glitch-offset-x) * -0.5), 0); }
-    75% { transform: translate(var(--glitch-offset-x), 0); }
-    100% { transform: translate(calc(var(--glitch-offset-x) * -1), 0); }
+.guestbook-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+#visitor-count {
+    color: var(--color-accent-green);
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.signature-form {
+    margin: 30px 0;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.signature-form input {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    width: 60%;
+    max-width: 300px;
+    transition: border-color 0.3s;
+}
+.signature-form input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+.signature-form button {
+    background-color: var(--color-accent-green);
+    border: none;
+    color: #0d1117;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.signature-form button:hover {
+    background-color: #fff;
+}
+
+#signature-list {
+    margin-top: 40px;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    min-height: 100px;
+}
+.signature-item {
+    border-bottom: 1px solid var(--color-border);
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.signature-item:last-child {
+    border-bottom: none;
+}
+.signature-item .name {
+    color: #fff;
+    font-weight: bold;
+}
+.signature-item .date {
+    font-size: 0.8em;
+    color: #8b949e; 
+}
+
+.signature-item .actions {
+    display: flex;
+    gap: 10px;
+}
+.signature-item .actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #8b949e;
+    font-size: 0.8em;
+    padding: 2px 5px;
+    transition: color 0.2s;
+}
+.signature-item .actions button:hover {
+    color: var(--color-accent);
+}
+
+/* 編集中のボタンのスタイル */
+.signature-form.is-editing button {
+    background-color: var(--color-accent);
+}
+
+/* --- 管理者パネルのスタイル --- */
+.admin-panel {
+    max-width: 700px;
+    margin: -30px auto 30px; /* 位置調整 */
+    padding: 20px;
+    border: 1px solid var(--color-accent);
+    border-radius: 8px;
+    background-color: rgba(88, 166, 255, 0.1);
+    text-align: center;
+}
+.admin-panel h4 {
+    margin-bottom: 15px;
+    color: var(--color-accent);
+}
+.admin-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.admin-form label {
+    font-size: 0.9em;
+}
+.admin-form input {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 5px 10px;
+    border-radius: 4px;
+    width: 100px;
+}
+.admin-form button {
+    background-color: var(--color-accent);
+    color: #fff;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.admin-note {
+    font-size: 0.8em;
+    opacity: 0.7;
+    margin-top: 10px;
+}
+.signature-item.admin-view .actions {
+    opacity: 1; /* 管理者には常にボタンを表示 */
 }
