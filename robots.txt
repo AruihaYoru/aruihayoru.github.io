@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aruihayoru.github.io/sitemap.xml
+Sitemap: https://aruihayoru.github.io/sitemap_index.xml
