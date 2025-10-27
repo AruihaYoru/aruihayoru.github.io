@@ -372,3 +372,14 @@ main {
 .signature-item.admin-view .actions {
     opacity: 1; /* 管理者には常にボタンを表示 */
 }
+
+
+.guestbookImg {
+  border-radius: 10px;
+  background-color: #eeeeee;
+  border-top: 1px solid #333333;
+  border-right: 1px solid #333333;
+  border-left: 1px solid #333333;
+  border-bottom: 10px solid #CCCCCC;
+  margin-top: 20px;
+}
