@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archives | 或いは夜</title>
+    
+    <!-- フォント読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- スタイル定義 (埋め込み) --- */
+        :root {
+            --color-bg: #0d1117; 
+            --color-primary: #0d1a31;
+            --color-secondary: #0f343b;
+            --color-text: #c9d1d9;
+            --color-accent: #58a6ff;
+            --color-accent-green: #34d399;
+            --color-danger: #ff6b6b; /* 廃棄領域用の警告色 */
+            --color-border: rgba(139, 148, 158, 0.3);
+            --color-card-bg: rgba(22, 27, 34, 0.8);
+            --font-heading: 'Bebas Neue', cursive;
+            --font-body: 'Noto Sans JP', sans-serif;
+            --font-mono: 'Share Tech Mono', monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-image: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+            background-size: 200% 200%;
+            background-attachment: fixed;
+            animation: gradient-animation 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ヘッダーエリア */
+        header {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--color-border);
+            background: rgba(13, 17, 23, 0.6);
+            backdrop-filter: blur(5px);
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--color-accent-green);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            border: 1px solid var(--color-accent-green);
+            padding: 5px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: var(--color-accent-green);
+            color: var(--color-bg);
+        }
+
+        /* グリッドレイアウト */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-family: var(--font-mono);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(900px, 1fr)); /* スマホ対応のため幅調整 */
+            gap: 30px;
+        }
+
+        /* カードスタイル */
+        .project-card {
+            background-color: var(--color-card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
+            border-color: var(--color-accent);
+        }
+
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding: 25px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+            font-family: var(--font-body);
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 10px;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+            flex-grow: 1; 
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto; 
+        }
+
+        .card-tag {
+            background-color: rgba(88, 166, 255, 0.2);
+            color: var(--color-accent);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+        }
+
+        /* --- 折り畳み（廃棄領域）のスタイル --- */
+        .trash-section {
+            margin-top: 80px;
+            border-top: 1px solid var(--color-border);
+            padding-top: 40px;
+        }
+
+        .trash-details {
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .trash-details[open] {
+            border-color: var(--color-danger);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.1);
+        }
+
+        .trash-summary {
+            padding: 20px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #8b949e;
+            transition: all 0.3s;
+            list-style: none; /* デフォルトの▲を消す */
+        }
+        .trash-summary::-webkit-details-marker { display: none; } /* Safari用 */
+
+        .trash-summary:hover {
+            color: var(--color-danger);
+            background: rgba(255, 107, 107, 0.05);
+        }
+
+        .trash-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .trash-details[open] .trash-icon {
+            transform: rotate(180deg);
+        }
+
+        .trash-content {
+            padding: 30px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .trash-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* 廃棄物カード（小さめ・点線） */
+        .trash-card {
+            border: 1px dashed var(--color-border);
+            background: rgba(13, 17, 23, 0.2);
+            border-radius: 6px;
+            padding: 15px;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+        .trash-card:hover {
+            border-color: var(--color-danger);
+            border-style: solid;
+            background: rgba(255, 107, 107, 0.05);
+            transform: scale(1.02);
+        }
+        .trash-title {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--color-danger);
+            margin-bottom: 5px;
+        }
+        .trash-desc {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* アニメーション用クラス */
+        .animate-target {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-target.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 40px;
+            border-top: 1px solid var(--color-border);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #8b949e;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="header-title">PROJECT ARCHIVES</h1>
+        <a href="index.html" class="back-link">&lt; Return to Main Terminal</a>
+    </header>
+
+    <div class="container">
+        <p class="intro-text animate-target">これまでに作成された全てのプロジェクトデータのうち、ポータルページに載せられなかった部分。</p>
+
+        <div class="project-grid">
+
+            <!-- 造語生成 -->
+            <div class="project-card animate-target">
+                <a href="https://aruihayoru.github.io/name" target="_blank" class="card-link">
+                    <h3 class="card-title">造語生成　★</h3>
+                    <p class="card-description">言語解析して～、それを使って～...ってだけ。たぶん少し歴史を変えると実在したかもってぐらいには</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Tool</span>
+                        <span class="card-tag">Generator</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Anti_CORS -->
+            <div class="project-card animate-target">
+                <a href="https://aruihayoru.github.io/TrickArt/" target="_blank" class="card-link">
+                    <h3 class="card-title">Anti_CORS</h3>
+                    <p class="card-description">CORSとかいうゴミカスプロトコルをアプリ内で削除できないゴミカスブラウザ・Chromeのためだけの作品。学校のタブレットにcrxを読み込ませるためのハック。</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Chrome Ext</span>
+                        <span class="card-tag">Hack</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- TCHOターミナル -->
+            <div class="project-card animate-target">
+                <a href="https://aruihayoru.github.io/TCHO" target="_blank" class="card-link">
+                    <h3 class="card-title">TCHO Terminal</h3>
+                    <p class="card-description">『SCP MAD[SIMULATION]』に影響された独自ターミナル。「或いは夜」の正確な人事ファイルを交えた、中二病故の作品。</p>
+                    <div class="card-tags">
+                        <span class="card-tag">UI/UX</span>
+                        <span class="card-tag">Concept</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- B1uePr1nter -->
+            <div class="project-card animate-target">
+                <a href="https://aruihayoru.github.io/B1uePr1nter/" target="_blank" class="card-link">
+                    <h3 class="card-title">B1uePr1nter ★</h3>
+                    <p class="card-description">treeやインデント形式で示されたファイル構造を自由に改変し、自動で作成するプログラムを生成する。</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Utility</span>
+                        <span class="card-tag">Automation</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ポータルページ -->
+            <div class="project-card animate-target">
+                <a href="https://aruihayoru.github.io/" target="_blank" class="card-link">
+                    <h3 class="card-title">Portal Page</h3>
+                    <p class="card-description">現在のこのポートフォリオサイト。Firebase連携、CSSアニメーションなど、実験的な要素の集合体。</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Portfolio</span>
+                        <span class="card-tag">Firebase</span>
+                    </div>
+                </a>
+            </div>
+			
+             <!-- プレースホルダー -->
+             <div class="project-card animate-target">
+                <div class="card-link" style="cursor: default;">
+                    <h3 class="card-title">Coming Soon...</h3>
+                    <p class="card-description">プレースホルダー</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Unknown</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="trash-section animate-target">
+            <details class="trash-details">
+                <summary class="trash-summary">
+                    <span>⚠️ DUMP: Logical Debris / 廃棄論理領域</span>
+                    <span class="trash-icon">▼</span>
+                </summary>
+                <div class="trash-content">
+                    <p style="margin-bottom:20px; font-size:0.8rem; color:#8b949e;">
+                        ※注意：ここにあるものは、レポジトリを与える価値すらないと判断された電子ゴミです。
+                        ほんとに高度なものが紛れている可能性がありますわよ！
+                    </p>
+					
+                         <a href="http://aruihayoru.github.io/Scrap/3D.html" class="trash-card">
+                            <h4 class="trash-title">ライブラリ無3D空間</h4>
+                            <p class="trash-desc">なんと！！このページ！！ライブラリを使わずに！！DOMだけで！！3D空間を！！つくって！！います！！</p>
+                        </a>
+						
+                    <div class="trash-grid">
+                        
+
+
+                    </div>
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; Aruiha Yoru. All systems nominal.</p>
+    </footer>
+
+    <script>
+        // --- スクリプト (埋め込み) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // スクロールアニメーションの監視
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // 少しずつずらして表示させる（Stagger effect）
+                        setTimeout(() => {
+                            entry.target.classList.add('is-visible');
+                        }, index * 50); // インデックスに応じて遅延
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const targets = document.querySelectorAll('.animate-target');
+            targets.forEach(target => {
+                observer.observe(target);
+            });
+        });
+    </script>
+</body>
+</html>

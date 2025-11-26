@@ -1,0 +1,391 @@
+/* --- 基本設定 & 変数 --- */
+:root {
+    --color-bg: #0d1117; 
+    --color-primary: #0d1a31;
+    --color-secondary: #0f343b;
+    --color-text: #c9d1d9;
+    --color-accent: #58a6ff;
+    --color-accent-green: #34d399;
+    --color-border: rgba(139, 148, 158, 0.3);
+    --color-card-bg: rgba(22, 27, 34, 0.8);
+    --font-heading: 'Bebas Neue', cursive;
+    --font-body: 'Noto Sans JP', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    overflow-x: hidden;
+    background-image: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+    background-size: 200% 200%;
+    background-attachment: fixed;
+    animation: gradient-animation 15s ease infinite;
+}
+
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- ヒーローセクション --- */
+.hero-section {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative; 
+}
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+        linear-gradient(rgba(52, 211, 153, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(52, 211, 153, 0.07) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.5;
+    animation: grid-pan 15s linear infinite;
+}
+@keyframes grid-pan {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+}
+.hero-content { z-index: 1; }
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(4rem, 6rem, 10rem);
+    letter-spacing: 0.1em;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+.hero-subtitle {
+    font-family: var(--font-mono);
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    opacity: 0.8;
+}
+
+/* --- 共通セクションスタイル --- */
+main { 
+    background: rgba(13, 17, 23, 0.1);
+}
+.page-section {
+    width: 100%;
+    margin: 0 auto;
+    padding: 50px 20px;
+    position: relative;
+    z-index: 1;
+}
+.page-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 100%;
+    /* 基本の背景色を設定。下のセクションで上書きしていく */
+    background: rgba(13, 17, 23, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--color-border);
+    z-index: -1;
+    transition: background-color 0.3s ease; /* ホバー時のためにトランジションを追加 */
+}
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 60px;
+    color: var(--color-accent-green);
+    letter-spacing: 2px;
+    position: relative;
+}
+.description {
+	font-family: var(--font-body);
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 5px;
+    color: white;
+    letter-spacing: 2px;
+    position: relative;	
+}
+
+/* --- セクションごとの設定 --- */
+#projects, #lab, #about, #inspirations {
+	margin-bottom:20px;
+}
+
+/* --- セクションごとの背景の暗さ調整 --- */
+#projects::before {
+    background: rgba(13, 17, 23, 0.2); /* ベースの明るさ */
+}
+#lab::before {
+    background: rgba(13, 17, 23, 0.3); /* 少し暗く */
+}
+#about::before {
+    background: rgba(13, 17, 23, 0.35); /* さらに暗く */
+}
+#inspirations::before {
+    background: rgba(13, 17, 23, 0.4); /* 最も暗く */
+}
+
+
+/* --- 各コンポーネント --- */
+.project-card {
+    background-color: var(--color-card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    border: 1px solid var(--color-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(88, 166, 255, 0.3);
+    border-color: var(--color-accent);
+}
+.card-link { display: block; text-decoration: none; color: inherit; }
+.card-content { padding: 30px; }
+.card-title { font-size: 2rem; margin-bottom: 10px; color: #fff; }
+.card-description { margin-bottom: 20px; font-weight: 300; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.card-tag {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.lab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+.lab-item {
+    background-color: rgba(30, 38, 48, 0.7);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 25px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+.lab-item:hover {
+    background-color: var(--color-card-bg);
+    border-color: var(--color-accent-green);
+}
+.lab-title { font-size: 1.5rem; color: var(--color-accent-green); margin-bottom: 10px; }
+.lab-description { font-size: 0.9rem; margin-bottom: 15px; }
+.lab-link { color: var(--color-accent); text-decoration: none; font-weight: bold; font-family: var(--font-mono); }
+.lab-link:hover { text-decoration: underline; }
+
+.inspiration-list { display: flex; flex-direction: column; gap: 30px; }
+.inspiration-item {
+    border-left: 3px solid var(--color-border);
+    padding: 15px 25px;
+    transition: border-color 0.3s, background-color 0.3s;
+    border-radius: 0 8px 8px 0;
+}
+.inspiration-item:hover { border-color: var(--color-accent); background-color: rgba(30, 38, 48, 0.7); }
+.inspiration-category { font-family: var(--font-mono); color: var(--color-accent); font-size: 0.9rem; display: block; margin-bottom: 5px; }
+.inspiration-title { font-size: 1.8rem; color: #fff; margin-bottom: 5px; }
+.inspiration-comment { font-weight: 300; }
+
+.about-content { margin: 0 auto; text-align: center; }
+.about-content h3 { font-size: 2rem; color: #fff; margin-bottom: 15px; position: relative; }
+.about-links { margin-top: 30px; display: flex; justify-content: center; gap: 30px; }
+.about-links a { color: var(--color-accent-green); text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: color 0.3s ease; }
+.about-links a:hover { color: #fff; }
+
+/* --- スクロールアニメーション --- */
+.animate-target {
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* 下から表示される要素の初期位置 */
+.animate-target.from-bottom {
+    transform: translateY(40px);
+}
+
+/* 上から表示される要素の初期位置 */
+.animate-target.from-top {
+    transform: translateY(-40px);
+}
+
+/* 画面内に入ったときの最終的な位置 */
+.animate-target.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* --- ゲストブックセクション --- */
+#guestbook::before {
+    clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+    background: rgba(13, 17, 23, 0.70); /* aboutとinspirationsの中間の暗さ */
+}
+.guestbook-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+#visitor-count {
+    color: var(--color-accent-green);
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.signature-form {
+    margin: 30px 0;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.signature-form input {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    width: 60%;
+    max-width: 300px;
+    transition: border-color 0.3s;
+}
+.signature-form input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+.signature-form button {
+    background-color: var(--color-accent-green);
+    border: none;
+    color: #0d1117;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.signature-form button:hover {
+    background-color: #fff;
+}
+
+#signature-list {
+    margin-top: 40px;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    min-height: 100px;
+}
+.signature-item {
+    border-bottom: 1px solid var(--color-border);
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.signature-item:last-child {
+    border-bottom: none;
+}
+.signature-item .name {
+    color: #fff;
+    font-weight: bold;
+}
+.signature-item .date {
+    font-size: 0.8em;
+    color: #8b949e; 
+}
+
+.signature-item .actions {
+    display: flex;
+    gap: 10px;
+}
+.signature-item .actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #8b949e;
+    font-size: 0.8em;
+    padding: 2px 5px;
+    transition: color 0.2s;
+}
+.signature-item .actions button:hover {
+    color: var(--color-accent);
+}
+
+/* 編集中のボタンのスタイル */
+.signature-form.is-editing button {
+    background-color: var(--color-accent);
+}
+
+/* --- 管理者パネルのスタイル --- */
+.admin-panel {
+    max-width: 700px;
+    margin: -30px auto 30px; /* 位置調整 */
+    padding: 20px;
+    border: 1px solid var(--color-accent);
+    border-radius: 8px;
+    background-color: rgba(88, 166, 255, 0.1);
+    text-align: center;
+}
+.admin-panel h4 {
+    margin-bottom: 15px;
+    color: var(--color-accent);
+}
+.admin-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.admin-form label {
+    font-size: 0.9em;
+}
+.admin-form input {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 5px 10px;
+    border-radius: 4px;
+    width: 100px;
+}
+.admin-form button {
+    background-color: var(--color-accent);
+    color: #fff;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.admin-note {
+    font-size: 0.8em;
+    opacity: 0.7;
+    margin-top: 10px;
+}
+.signature-item.admin-view .actions {
+    opacity: 1; /* 管理者には常にボタンを表示 */
+}
+
+
+.guestbookImg {
+  border-top: 2px solid #333333;
+  border-right: 2px solid #333333;
+  border-left: 2px solid #333333;
+  border-bottom: 2px solid #333333;
+  margin-top: 20px;
+}

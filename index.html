@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>白昼。或いは夜。若しくは明朝。</title>
+    <link rel="stylesheet" href="resources/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="resources/css2.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+    <!-- 上部: ヒーローセクション -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">「或いは夜」のポータルページ</h1>
+            <p class="hero-subtitle">Code, Create, and Explore the Digital Frontier.</p>
+            <p class="hero-subtitle">たぶんだけど、絶対に役に立たないものしか作らない。役立つものを追求し続けるのは間違いでは？</p>
+        </div>
+		
+		<br>
+		
+
+		
+    </header>
+		<section class="page-section" id="guestbook">
+
+			
+			<div id="admin-panel" class="admin-panel" style="display: none;">
+				<h4>管理者パネル</h4>
+				<div class="admin-form">
+					<label for="admin-count-input">カウンター値の変更:</label>
+					<input type="number" id="admin-count-input">
+					<button id="admin-count-submit">更新</button>
+				</div>
+				<p class="admin-note">（各署名の編集/削除は署名リストから直接行えます）</p>
+			</div>
+            <h2 class="section-title animate-target">Guestbook</h2>
+            <div class="guestbook-content animate-target">
+                <p>
+                    このサイトには <strong id="visitor-count">...</strong> 人が訪れました。
+                    よろしければ、あなたの名前を刻んでいってください。<br>
+					ていうか～～GithubPagesとかいう静的ページにこんな動的な要素つくれるのすごくないすか<br>
+					フロントエンドでここまでやってんすよ
+                </p>
+				<div class="signature-form" id="signature-form-area"> <!-- ← IDを追加 -->
+					<input type="text" id="signature-name" placeholder="お名前 (15文字まで)" maxlength="15">
+					<button id="submit-signature">署名する</button>
+				</div>
+                <div id="signature-list">
+                    <p>署名データを読み込み中...</p>
+                </div>
+				<img src="./asset/Good.png" class="guestbookImg"></img>
+				<p>↑やりやがったボット許さない（ボットじゃなかったらありがとうだけど）</p>
+				<p>現在ですね、Firebaseコンソールにアクセスできない状態です（電話番号認証してないので）</p>
+            </div>
+
+			
+        </section>
+    <main>
+			<!-- 中部: プロジェクトセクション -->
+			<section class="page-section" id="projects">
+				<h2 class="section-title animate-target">Projects</h2>
+				<h1 class="description">...の中でも、特に自身のあるもの。</h1>
+
+				<div class="project-card animate-target">
+					<a href="https://aruihayoru.github.io/VisualJScode/" target="_blank" class="card-link">
+						<div class="card-content">
+							<h3 class="card-title">VisualJScode</h3>
+							<p class="card-description">Blocklyを使用した、ビジュアルJavascriptエディタ。（現在逃亡中）</p>
+							 <div class="card-tags">
+								<span class="card-tag">JavaScript</span>
+								<span class="card-tag">HTML/CSS</span>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="project-card animate-target">
+					<a href="https://aruihayoru.github.io/no-js-minesweeper/" target="_blank" class="card-link">
+						<div class="card-content">
+							<h3 class="card-title">CheckboxHack:MineSweeper</h3>
+							<p class="card-description">「もしゲームのロジックを全てCSSで書いたら？」という思考実験を形にした作品。プログラム言語なしでのゲーム実装という、前代未聞の離れ業を成し遂げています。頭が！！！いい！！！きっと！！！</p>
+							 <div class="card-tags">
+								<span class="card-tag">HTML/CSS</span>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<div class="project-card animate-target">
+					<a href="https://aruihayoru.github.io/NewVideo" target="_blank" class="card-link">
+						<div class="card-content">
+							<h3 class="card-title">.mrvプレイヤー</h3>
+							<p class="card-description">独自バイナリフォーマットの映像プレイヤー。映像・バイナリ解析、圧縮技術などを活用。</p>
+							 <div class="card-tags">
+								<span class="card-tag">JavaScript</span>
+								<span class="card-tag">HTML/CSS</span>
+								<span class="card-tag">Python</span>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<div class="project-card animate-target">
+					<a href="https://aruihayoru.github.io/TrickArt/" target="_blank" class="card-link">
+						<div class="card-content">
+							<h3 class="card-title">アナモルフォーシスGen</h3>
+							<p class="card-description">画像を別の図形に投影して....っていう、錯視アートの一種。Gemini2.5proくんはシェーダーつくるのすごい上手ってわかりました。three.js</p>
+							<div class="card-tags">
+								<span class="card-tag">JavaScript</span>
+								<span class="card-tag">HTML/CSS</span>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+				<h1 class="description"><a href="resources/project.html" class="card-link">全てのプロジェクトはこちらから</a></h1>
+				
+			</section>
+
+			<!-- My Lab セクション -->
+			<section class="page-section" id="lab">
+				<h2 class="section-title animate-target">My Lab</h2>
+
+				<div class="lab-grid">
+					<div class="lab-item animate-target">
+						<h4 class="lab-title">27 minitue</h4>
+						<p class="lab-description">プレイヤーは27分間ごとにリセットされる。コンソールを打ち続け、エンディングを探す。たぶん。きっと。</p>
+					</div>
+				</div>
+				
+				<br>
+
+				<div class="lab-grid">
+					<div class="lab-item animate-target">
+						<h4 class="lab-title">Emoji Factory</h4>
+						<p class="lab-description">Emojiを使役し、稼ぎを生み出させ続ける。Emojiに人権はない。</p>
+					</div>
+				</div>
+				
+				<br>
+				
+				<div class="lab-grid">
+					<div class="lab-item animate-target">
+						<h4 class="lab-title">０F:Limbo</h4>
+						<p class="lab-description">Emojiを仲間にし、最上階若しくは最下層を目指せ。</p>
+					</div>
+				</div>
+
+				<br>
+
+
+			</section>
+
+			<!-- 下部: About Meセクション -->
+			<section class="page-section" id="about">
+				<h2 class="section-title animate-target">About Me</h2>
+				<div class="about-content animate-target">
+					<h3>Aruiha Yoru (或いは 夜)</h3>
+					<p>ゼンレスゾーンゼロの星見雅が大好きな未成年です。html/
+	JavaScript/cssについてしかあんま知りません。<br>コメントの際しかクリニカルな表現が使えません。なんならコメントも気分次第です。文書フェ
+	チ。デベロッパーを名乗って良いのだろうか？<br>授業中にPowershellのコード書くと怒られることを最近学びました。学校の備品というか市の所有物に
+	pythonをダウンロードさしてください先生</p>
+					<p>接続詞が好きです。それと海洋生物。海獣医になりたいな？</p>
+					<p>ちなみに...時によって或葉ちゃんかもね。</p>
+					<img src="./asset/Hackall.png" class="guestbookImg"></img>
+					<p>それと、Hackall V3の最終問題正解者ですわよ</p>
+					<p><a href="https://hackall.tech" class="card-link" target="_blank" class="card-link">みんなも、やろう！</a></p>
+					<div class="about-links">
+						<a href="https://x.com/AruihaYoru" target="_blank">Twitter（現X）</a>
+					</div>
+					<div class="about-links">
+						<p>Welcome! Aruiha.</p>
+						<a href="#" id="auth-button">管理者としてログイン</a>
+					</div>
+					<!-- about-linksの使いまわしlol -->
+					<!-- ↑ほんとにこのひとなに言ってるんですか？？？ -->
+				</div>
+			</section>
+
+			<!-- Inspirations セクション -->
+			<section class="page-section" id="inspirations">
+				<h2 class="section-title animate-target">Inspirations</h2>
+				<div class="inspiration-list">
+					
+					
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Game</span>
+						<h4 class="inspiration-title">ゼンレスゾーンゼロ</h4>
+						<p class="inspiration-comment">他の追随を許さない特有の世界観、色彩感覚、アーバンな雰囲気の表現。</p>
+					</div>
+					
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Game</span>
+						<h4 class="inspiration-title">Cyberpunk 2077</h4>
+						<p class="inspiration-comment">（未プレイながら）圧倒的な世界観構築力と、そこに息づくビジュアルデザインに強く惹かれる。</p>
+					</div>
+					
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Game</span>
+						<h4 class="inspiration-title">カタストロフィレストラン</h4>
+						<p class="inspiration-comment">ユーザーに快楽を感じさせる方法。世界観。</p>
+					</div>
+
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Game</span>
+						<h4 class="inspiration-title">デス・ストランディング</h4>
+						<p class="inspiration-comment">唯一無二の世界観構築と、創作物における「テーマ」という概念を深く追求する姿勢。</p>
+					</div>
+
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Game / Education</span>
+						<h4 class="inspiration-title">Minecraft</h4>
+						<p class="inspiration-comment">コマンドによる論理的思考の構築。「プログラミング」という概念に触れるきっかけを与えてくれた。</p>
+					</div>
+					
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Game / Education</span>
+						<h4 class="inspiration-title">Roblox</h4>
+						<p class="inspiration-comment">おそらく最初で最後の3Dエンジン。自分にはアセット無でNotepad++に向き合うほうが合っている。</p>
+					</div>
+					
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Manga / Story</span>
+						<h4 class="inspiration-title">チェンソーマン / GHOST Fixers / 亜人</h4>
+						<p class="inspiration-comment">物語にリアリティと深みを与える「公的機関」という枠組み、その概念の巧みな使い方。</p>
+					</div>
+
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Movie</span>
+						<h4 class="inspiration-title">トゥルーマン・ショー</h4>
+						<p class="inspiration-comment">当たり前の日常や世界を「疑う」ことの重要性、そして世界の真実を探求する姿勢。</p>
+					</div>
+
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Concept / Horror</span>
+						<h4 class="inspiration-title">人間の恐怖の根源</h4>
+						<p class="inspiration-comment">『ゼロ・グラビティ』の孤独、『チェンソーマン』の未知、『近畿地方のある場所について』の不気味さ。人間が根源的に何を怖がるかという探求。</p>
+					</div>
+					
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Game</span>
+						<h4 class="inspiration-title">Warframe</h4>
+						<p class="inspiration-comment">多種多様なキャラクターデザインと、それぞれの背景にある奥深いストーリーテリング。</p>
+					</div>
+					
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Web Fiction / Writing</span>
+						<h4 class="inspiration-title">SCP財団</h4>
+						<p class="inspiration-comment">どうすればより良い文章を書けるのか。読者の想像力を刺激しつつ、クールで客観的な「クリニカルさ」を保つ文章術。</p>
+					</div>
+
+					<div class="inspiration-item animate-target">
+						<span class="inspiration-category">Movie / Anime</span>
+						<h4 class="inspiration-title">GHOST IN THE SHELL / 攻殻機動隊</h4>
+						<p class="inspiration-comment">サイバーパンクの世界観、UIデザイン、そして「自我」を問う哲学的なテーマが全ての創作の根源にある。</p>
+					</div>
+					
+					
+				</div>
+				
+			</section>
+
+
+		
+    </main>
+
+	<script src="resources/script.js"></script>
+
+
+
+</body></html>
+
+
+
+
+
+
+
+
+
+
+
+
