@@ -30,7 +30,7 @@
 		<section class="page-section" id="guestbook">
 
 			
-			<div id="admin-panel" class="admin-panel" style="display: none;">
+<!-- 			<div id="admin-panel" class="admin-panel" style="display: none;">
 				<h4>管理者パネル</h4>
 				<div class="admin-form">
 					<label for="admin-count-input">カウンター値の変更:</label>
@@ -38,8 +38,10 @@
 					<button id="admin-count-submit">更新</button>
 				</div>
 				<p class="admin-note">（各署名の編集/削除は署名リストから直接行えます）</p>
-			</div>
+			</div> -->
+			
             <h2 class="section-title animate-target">Guestbook</h2>
+			
             <div class="guestbook-content animate-target">
                 <p>
                     このサイトには <strong id="visitor-count">...</strong> 人が訪れました。
@@ -56,9 +58,11 @@
                 </div>
 				<img src="./asset/Good.png" class="guestbookImg"></img>
 				<p>↑やりやがったボット許さない（ボットじゃなかったらありがとうだけど）</p>
-				<p>現在ですね、Firebaseコンソールにアクセスできない状態です（電話番号認証してないので）</p>
+				<p>なんと、&lt;script>っていう名前で登録されてて。<br>XSS脆弱性によってぶち壊れてましたわ、許さない。</p>
+				<!-- left than、でlt;なのおもろい -->
             </div>
-
+			
+			
 			
         </section>
     <main>
