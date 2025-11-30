@@ -1,3 +1,6 @@
+// script.js
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // =========================================================================
@@ -43,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (adminLoginButton) {
         adminLoginButton.addEventListener('click', (e) => {
             e.preventDefault();
-            alert('管理作業は、専用の管理者パネルから行います。');
+            alert('管理作業は、専用の管理者パネルから行います');
         });
     }
     setupVisitorCounter();
@@ -93,11 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             newSubmitButton.addEventListener('click', () => {
                 if (!currentUser) {
-                    alert('ユーザー情報の取得中です。少し待ってから再度お試しください。');
+                    alert('ユーザー情報の取得中です少し待ってから再度お試しください');
                     return;
                 }
                 const name = nameInput.value.trim();
-                if (name === '') { alert('名前を入力してください。'); return; }
+                if (name === '') { alert('名前を入力してください'); return; }
 
                 newSubmitButton.disabled = true;
                 newSubmitButton.textContent = '送信中...';
@@ -123,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             signatureListContainer.innerHTML = '';
 
             if (snapshot.empty) {
-                signatureListContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">まだ誰も署名していません。</p>';
+                signatureListContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">まだ誰も署名していません</p>';
                 return;
             }
 

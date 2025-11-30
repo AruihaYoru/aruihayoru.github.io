@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isMobile && isPortrait) {
             if (!overlay) createOverlay();
+			console.log('!! 横幅768以下からのアクセスを検知')
 			console.log('え、君ってスマホ？')
         } else {
             if (overlay) {
@@ -127,11 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })();
 
-// !!-------!!
-// ちょーちょーちょーじゅうよう！！！
-// cd "C:/Users/Mecat/Downloads/aruihayoru.github.io-main/aruihayoru.github.io-main"
-// git add .
-// git commit -m "エヴァっていいよね"
-// git push
+// -------------------------------------------------------------------------------
 
-  
+/* ちょーちょーちょーじゅうよう！！！
+
+cd "C:/Users/Mecat/Downloads/aruihayoru.github.io-main/aruihayoru.github.io-main"
+git add .
+git commit -m "ここに詳細を入力"
+git push
+
+*/
+
+// -------------------------------------------------------------------------------
+
+
