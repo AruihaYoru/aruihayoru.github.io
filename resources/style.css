@@ -213,6 +213,10 @@ main {
 .about-links { margin-top: 30px; display: flex; justify-content: center; gap: 30px; }
 .about-links a { color: var(--color-accent-green); text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: color 0.3s ease; }
 .about-links a:hover { color: #fff; }
+.about-header { display: flex; align-items: center; justify-content: center; gap: 10px; margin: auto; }
+.about-icon { height: 64px; vertical-align: middle; margin-right: 10px; width: auto;}
+.about-description>p::after{content:'';display:inline-block;width:16px;height:16px;background-image:url(../asset/icon.gif);background-size:contain;background-repeat:no-repeat;background-position:center;margin-left:2px;vertical-align:middle}
+/* 一行で書くべきじゃないな */
 
 /* --- スクロールアニメーション --- */
 .animate-target {

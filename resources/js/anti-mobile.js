@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ちょーちょーちょーじゅうよう！！！
 
-cd "C:/Users/Mecat/Downloads/aruihayoru.github.io-main/aruihayoru.github.io-main"
+cd "C:\Users\Mecat\Documents\aruihayoru.github.io-main\aruihayoru.github.io-main"
 git add .
 git commit -m "ここに詳細を入力"
 git push
