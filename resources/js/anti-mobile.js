@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isMobile && isPortrait) {
             if (!overlay) createOverlay();
-			console.log('!! 横幅768以下からのアクセスを検知')
 			console.log('え、君ってスマホ？')
         } else {
             if (overlay) {
