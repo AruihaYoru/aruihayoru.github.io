@@ -29,7 +29,7 @@
             width: var(--marker-width);
             background-color: var(--accent-color);
             z-index: 1;
-            transition: width 0.1s ease-out;
+            transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .marker-text {

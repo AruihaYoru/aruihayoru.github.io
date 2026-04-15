@@ -3,55 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>github.is-a.tokyo</title>
-    <meta name="description" content="Personal space for github.is-a.tokyo">
+    <title>github.is-a.tokyo | Monochrome Space</title>
+    <meta name="description" content="A minimalist monochrome space with dynamic grid systems.">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
-    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;700&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="background-overlay"></div>
+    <canvas id="grid-canvas"></canvas>
     
     <div class="scroll-container">
-        <!-- Section 1: Default Black Marker -->
-        <section class="section-hero">
-            <div class="container">
-                <div class="marker-wrapper">
-                    <h1 class="marker-text">github.is-a.tokyo</h1>
+        <!-- Hero Section -->
+        <section id="hero" class="v-section" data-grid="hero">
+            <div class="content-box">
+                <div class="marker-wrapper" data-marker-color="#000000">
+                    <h1 class="hero-title marker-text">GITHUB.IS-A.TOKYO</h1>
                 </div>
-                <p class="status-label">Default Marker</p>
+                <p class="tagline">EXPERIMENTAL SPACE / DYNAMIC TENSION</p>
             </div>
         </section>
 
-        <div class="section-spacer"></div>
-
-        <!-- Section 2: Custom Color Marker (Red) -->
-        <section class="section-hero">
-            <div class="container">
-                <div class="marker-wrapper" data-marker-color="#ff0000">
-                    <h2 class="marker-text">Custom Red</h2>
+        <!-- Section 1 -->
+        <section id="section-1" class="v-section" data-grid="grid">
+            <div class="content-box">
+                <div class="marker-wrapper" data-marker-color="#000000">
+                    <h2 class="section-title marker-text">STANDARD GRID</h2>
                 </div>
-                <p class="status-label">data-marker-color="#ff0000"</p>
+                <p class="section-desc">Traditional Cartesian coordinate system representation.</p>
             </div>
         </section>
 
-        <div class="section-spacer"></div>
-
-        <!-- Section 3: Custom Trigger (Higher point) -->
-        <section class="section-hero">
-            <div class="container">
-                <div class="marker-wrapper" data-marker-color="#000000" data-marker-trigger="0.7">
-                    <h2 class="marker-text">Early Trigger</h2>
+        <!-- Section 2 -->
+        <section id="section-2" class="v-section" data-grid="diagonal">
+            <div class="content-box">
+                <div class="marker-wrapper" data-marker-color="#000000">
+                    <h2 class="section-title marker-text">CROSS OVERLAY</h2>
                 </div>
-                <p class="status-label">data-marker-trigger="0.7"</p>
+                <p class="section-desc">Interwoven lines forming a structural mesh.</p>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section id="section-3" class="v-section" data-grid="dots">
+            <div class="content-box">
+                <div class="marker-wrapper" data-marker-color="#000000">
+                    <h2 class="section-title marker-text">TICK GRID</h2>
+                </div>
+                <p class="section-desc">Short-stroke indicators marking precise coordinate units.</p>
             </div>
         </section>
     </div>
 
-    <!-- Standalone Library -->
+    <!-- Scripts -->
     <script src="text-reveal.js"></script>
+    <script src="grid-system.js"></script>
 </body>
 </html>
