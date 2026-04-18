@@ -1,16 +1,11 @@
 /**
- * text-reveal.js (Library)
- * A standalone, scroll-triggered marker effect with dynamic CSS injection.
- * 
- * Usage:
- * Link this script and add .marker-wrapper class to your elements.
- * Customize with data attributes:
- * - data-marker-color: Custom color (default: black)
- * - data-marker-trigger: Scroll threshold (0-1, default: 0.5)
+ * アーティストとかデザイナがバイブス／ノリで作りやがるせいで専門用語がわからずlibを探すこともなく1日ムダにしてlibつくりました
+ * I will melt
  */
 
 (function() {
-    // Dynamic CSS Injection
+    // 原告「被告、なぜCSSを動的に挿入しない」
+    // をされないように
     const css = `
         .marker-wrapper {
             position: relative;
@@ -30,6 +25,7 @@
             background-color: var(--accent-color);
             z-index: 1;
             transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            /* このマジックナンバーは、当時の私がそう命じたからであり、被告に過失はないものとする。*/
         }
 
         .marker-text {
@@ -49,6 +45,8 @@
         document.head.appendChild(style);
     };
 
+    // 以下の処理に関する一切の記憶を失っており、
+    // 証言を拒否します。
     const updateMarkers = (markers) => {
         const vh = window.innerHeight;
 
@@ -77,7 +75,8 @@
             }
         });
     };
-
+    // たぶん女神様が教えてくれた（ラマヌジャン方式）
+    
     const init = () => {
         injectCSS();
         const markers = document.querySelectorAll('.marker-wrapper');

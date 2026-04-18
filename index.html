@@ -3,61 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>github.is-a.tokyo | Monochrome Space</title>
-    <meta name="description" content="A minimalist monochrome space with dynamic grid systems.">
+    <title>Aruiha | github.is-a.tokyo</title>
+    <meta name="description" content="github.is-a.tokyo — Aruiha Yoru's repository collection.">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;700&family=JetBrains+Mono:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+	<script>
+
+	</script>
 </head>
 <body>
     <canvas id="grid-canvas"></canvas>
-    
-    <div class="scroll-container">
-        <!-- Hero Section -->
+
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="#" style="color:#1d1d1f;font-weight:700;text-decoration:none;font-size:0.85rem;letter-spacing:0.1em;">ARUIHA</a>
+            <div class="nav-links">
+                <a href="#works" data-magnetic>Works</a>
+                <a href="#profile" data-magnetic>Profile</a>
+                <a href="#links" data-magnetic>Links</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+
+        <!-- ヒーローセクション -->
         <section id="hero" class="v-section" data-grid="hero">
-            <div class="content-box">
+            <div class="hero-content">
                 <div class="marker-wrapper" data-marker-color="#000000">
-                    <h1 class="hero-title marker-text">GITHUB.IS-A.TOKYO</h1>
+                    <h1 class="hero-title marker-text">ARUIHA YORU</h1>
                 </div>
-                <p class="tagline">EXPERIMENTAL SPACE / DYNAMIC TENSION</p>
+                <p class="hero-sub text-reveal">github.is-a.tokyo</p>
             </div>
         </section>
 
-        <!-- Section 1 -->
-        <section id="section-1" class="v-section" data-grid="grid">
-            <div class="content-box">
+        <!-- つくったもの -->
+        <section id="works" class="v-section" data-grid="grid">
+            <div style="width:100%;">
                 <div class="marker-wrapper" data-marker-color="#000000">
-                    <h2 class="section-title marker-text">STANDARD GRID</h2>
+                    <h2 style="font-size:3rem;margin-bottom:3rem;" class="marker-text">WORKS</h2>
                 </div>
-                <p class="section-desc">Traditional Cartesian coordinate system representation.</p>
+                <div id="works-grid" class="works-grid">
+                    <!--  -->
+                </div>
             </div>
         </section>
 
-        <!-- Section 2 -->
-        <section id="section-2" class="v-section" data-grid="diagonal">
-            <div class="content-box">
-                <div class="marker-wrapper" data-marker-color="#000000">
-                    <h2 class="section-title marker-text">CROSS OVERLAY</h2>
+        <!-- Profile: クソ簡素なやつ -->
+        <section id="profile" class="v-section" data-grid="grid">
+            <div class="profile-section">
+                <div class="profile-text">
+                    <div class="marker-wrapper" data-marker-color="#000000">
+                        <h2 class="marker-text">PROFILE</h2>
+                    </div>
+                    <p>Focusing on the intersection of technical precision and artistic expression. I build digital experiences that feel as good as they look.</p>
                 </div>
-                <p class="section-desc">Interwoven lines forming a structural mesh.</p>
+                <div style="background:var(--card-bg);border-radius:28px;height:400px;display:flex;align-items:center;justify-content:center;border:1px solid var(--glass-border);">
+                    <span style="color:var(--text-secondary);font-size:0.8rem;letter-spacing:0.2em;">IMAGE AREA</span>
+                </div>
             </div>
         </section>
 
-        <!-- Section 3 -->
-        <section id="section-3" class="v-section" data-grid="dots">
-            <div class="content-box">
+        <!-- Links -->
+        <section id="links" class="v-section" data-grid="dots">
+            <div class="links-section">
                 <div class="marker-wrapper" data-marker-color="#000000">
-                    <h2 class="section-title marker-text">TICK GRID</h2>
+                    <h2 class="marker-text" style="font-size:3rem;">CONNECT</h2>
                 </div>
-                <p class="section-desc">Short-stroke indicators marking precise coordinate units.</p>
+                <div class="links-container">
+                    <a href="https://github.com/AruihaYoru" class="link-item" data-magnetic><span class="magnetic-inner">Github</span></a>
+                    <a href="#" class="link-item" data-magnetic><span class="magnetic-inner">Twitter</span></a>
+                    <a href="#" class="link-item" data-magnetic><span class="magnetic-inner">Email</span></a>
+                    <a href="#" class="link-item" data-magnetic><span class="magnetic-inner">LinkedIn</span></a>
+                </div>
             </div>
         </section>
-    </div>
 
-    <!-- Scripts -->
+        <!-- 回文と逆行するやつ　うーんTENET -->
+        <section id="section-tenet" class="v-section cinematic-section" data-grid="grid">
+            <div class="tenet-layout">
+                <div class="tenet-info">
+                    <h2 class="tenet-title">ENTROPY_ANALYSIS</h2>
+                    <p class="tenet-p">Investigating the collision of future and past. A real-time physics simulation exploring non-linear chronology and matter assembly.</p>
+                    <div class="tenet-specs">
+                        <span>LIBRARY: MATTER_JS</span>
+                        <span>LOGIC: REVERSIBLE_GRAVITY</span>
+                    </div>
+                </div>
+                <div class="cinematic-label">RECORD_01 // ENTROPY_INVERSION</div>
+            </div>
+        </section>
+
+        <!-- BR（新世紀教育改革法） -->
+        <section id="section-battle-royale" class="v-section cinematic-section" data-grid="diagonal">
+            <div class="br-layout">
+                <div class="br-spacer"></div>
+                <div class="br-info">
+                    <h2 class="br-title">ZONE_RESTRICTION</h2>
+                    <p class="br-p">Simulating a diminishing battlefield. An automated grid-control system that periodically isolates sectors through procedural hatch-shading.</p>
+                    <div class="br-stats">
+                        <span>SYSTEM: GEO_LOCK_ALPHA</span>
+                        <span>TRIGGER: RANDOM_SEC_20_30</span>
+                    </div>
+                </div>
+                <div class="cinematic-label">RECV_02 // SECTOR_LOCKDOWN</div>
+            </div>
+        </section>
+
+        <!-- ── Ready Player 1: Easter Egg keys ──────────────────────────── -->
+        <section id="section-rp1" class="v-section cinematic-section" data-grid="dots">
+            <div class="rp1-content" style="text-align:center;position:relative;z-index:2;">
+                <div class="cinematic-label">RECV_03 // ARTIFACT_COLLECTION</div>
+            </div>
+        </section>
+
+        <!-- マーーーー！！（号泣） -->
+        <section id="section-interstellar" class="v-section cinematic-section" data-grid="grid">
+            <div class="interstellar-inner">
+                <div class="cinematic-label">RECORD_04 // SINGULARITY_SIGNAL</div>
+                
+                <div class="interstellar-hero">
+                    <h1 class="interstellar-title">japanese-capital</h1>
+                    <p class="interstellar-description">A high-fidelity project archives. Exploring the intersection of digital governance and artistic precision.</p>
+                </div>
+
+                <div class="observation-window">
+                    <div class="observation-content">
+                        <img src="https://japanese-capital.is-a.tokyo/ogp.png" crossorigin="anonymous" class="obs-image">
+                        <div class="obs-overlay">
+                            <span class="obs-id">OBJ_ID: JPN_CAP_01</span>
+                            <span class="obs-status">SIGNAL_LOCKED</span>
+                        </div>
+                    </div>
+                    <!-- WebGL will wrap this -->
+                    <!-- WebGLって三人称単数現在では...? -->
+                    <!-- WebGL wills wrap this -->
+                    <!-- Willって助動詞だから-sつかないのでは...? -->
+                    <!-- WebGL is going to wrap this -->
+                </div>
+
+                <div class="interstellar-infobox">
+                    <div class="info-item">
+                        <span class="info-label">COORDINATES</span>
+                        <span class="info-value">10.04.1.25 // EINSTEIN_RING</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">TECHNOLOGY</span>
+                        <span class="info-value">WEBGL_SINGULARITY / SHADER_DISPLACEMENT</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">STATUS</span>
+                        <span class="info-value">OPERATIONAL_DATA_LINK</span>
+                    </div>
+                </div>
+
+                <div class="interstellar-sub">PROJECT_HASH: 0x82f42e27 // SINGULARITY_OBSERVED</div>
+            </div>
+        </section>
+
+        <!-- ゼロ・グラヴィティ（the Escapists 2の脱出方法のひとつ） -->
+        <!-- 嘘です映画の方です -->
+        <section id="section-zero-gravity" class="v-section cinematic-section" data-grid="dots">
+            <div class="cinematic-label">RECORD_05 // TETHERED_DRIFT</div>
+            
+            <div class="zg-layout">
+                <div class="zg-text-column">
+                    <h2 class="zg-title">GRAVITATIONAL_DYNAMICS</h2>
+                    <p class="zg-p">Simulating the isolation of free-fall. Every navigational anchor is connected by a fragile tether, swaying with the user's trajectory.</p>
+                    <div class="zg-specs">
+                        <span>NODE_PHYSICS: VERLET_INTEGRATION</span>
+                        <span>INTERACTION: INERTIAL_WHEEL</span>
+                    </div>
+                </div>
+                
+                <div class="zg-spacer"></div>
+
+                <div class="zg-content-side">
+                    <p class="zg-p-small">DATA_STREAM_01: CONNECTION_STABLE</p>
+                    <p class="zg-p-small">DATA_STREAM_02: SIGNAL_DECAY_DETECTED</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        <p>&copy; 2026 ARUIHA YORU. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- Core systems -->
+    <script src="interface-hud.js"></script>
     <script src="text-reveal.js"></script>
     <script src="grid-system.js"></script>
+    <script src="magnetic-ui.js"></script>
+    <script src="project-manager.js"></script>
+
+    <!-- Cinema effects -->
+    <script src="tenet-physics.js"></script>
+    <script src="battle-royale.js"></script>
+    <script src="easter-egg.js"></script>
+    <script src="interstellar.js"></script>
+    <script src="zero-gravity.js"></script>
+    <script src="shining.js"></script>
+    <!-- absolute cinema -->
+    
+<script>
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.get('debug') !== 'true') {
+        document.documentElement.innerHTML = '';
+        
+        document.write('<body></body>'); 
+        
+        console.log('Debug mode is OFF. DOM has been cleared.');
+    } else {
+        console.log('Debug mode is ON. Content is preserved.');
+    }
+})();
+</script>
 </body>
 </html>

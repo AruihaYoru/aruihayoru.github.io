@@ -75,7 +75,7 @@ class GridManager {
         const s = this.spacing;
         const cols = Math.ceil(this.width / s) + 2;
         const rows = Math.ceil(this.height / s) + 2;
-        const black = 'rgba(0, 0, 0, 1)';
+        const black = 'rgba(0, 0, 0, 0.1)';
 
         if (type === 'grid') {
             for (let y = 0; y < rows; y++) lines.push({ x1: 0, y1: y * s, x2: this.width, y2: y * s, color: black, x: 0, y: y, drawP: 0, eraseP: 0, phase: 'drawing' });
@@ -115,7 +115,7 @@ class GridManager {
         this.ctx.clearRect(0, 0, this.width, this.height);
         
         if (this.currentGrid === 'hero') {
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             this.heroDots.forEach(d => {
                 const angle = this.time + (d.ox + d.oy) * 0.005;
                 const r = 8;
