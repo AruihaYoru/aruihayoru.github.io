@@ -1,6 +1,4 @@
-/**
- * battle-royale.js
- */
+// これは本当に適当です。JSDoc全部消しました（戯言しか書いてなかったので私が）
 
 (function () {
     'use strict';
@@ -10,11 +8,7 @@
     link.href = 'https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap';
     document.head.appendChild(link);
 
-    const TIME_POOL = [
-        '午前0時', '0:00', '午前3時', '3:00', '午前6時', '6:00',
-        '午前9時', '9:00', '正午', '12:00', '午後3時', '15:00',
-        '午後6時', '18:00', '午後9時', '21:00', '深夜0時', '24:00',
-    ];
+    const TIME_POOL = ['午前0時', '0:00', '午前3時', '3:00', '午前6時', '6:00', '午前9時', '9:00', '正午', '12:00', '午後3時', '15:00', '午後6時', '18:00', '午後9時', '21:00', '深夜0時', '24:00'];
 
     class BattleRoyale {
         constructor(section) {
@@ -28,27 +22,39 @@
             this.infoLabels = [];
             this.nextTrigger = 1000;
             this.lastTime = performance.now();
+            this.isActive = false;
             this.build();
         }
 
         build() {
             this.canvas = document.createElement('canvas');
             this.canvas.id = 'br-canvas';
-            this.canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1;opacity:0.8;';
+            this.canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.8;';
             this.section.style.position = 'relative'; 
             this.section.insertBefore(this.canvas, this.section.firstChild);
 
+            window.ABS.registerCinematic('profile', {
+                start: () => { this.isActive = true; },
+                stop: () => { this.isActive = false; }
+            });
+
+            window.ABS.addHook({
+                onResize: () => this.resize(),
+                onTick: (t, s) => this.update(t, s)
+            });
+
             this.resize();
-            window.addEventListener('resize', () => this.resize());
             this.initGrid();
-            this.animate();
         }
 
         resize() {
+            const { w, h, dpr } = window.ABS.state.viewport;
             this.W = this.section.offsetWidth;
             this.H = this.section.offsetHeight;
-            this.canvas.width = this.W;
-            this.canvas.height = this.H;
+            this.canvas.width = this.W * dpr;
+            this.canvas.height = this.H * dpr;
+            this.ctx = this.canvas.getContext('2d', { alpha: true });
+            this.ctx.scale(dpr, dpr);
             this.cols = Math.ceil(this.W / this.cellW);
             this.rows = Math.ceil(this.H / this.cellH);
             this.initGrid();
@@ -66,8 +72,7 @@
 
         placeInfo() {
             this.infoLabels = [];
-            const count = 15; 
-            for (let i = 0; i < count; i++) {
+            for (let i = 0; i < 15; i++) {
                 this.infoLabels.push({
                     x: 30 + Math.random() * (this.W - 60),
                     y: 30 + Math.random() * (this.H - 60),
@@ -80,23 +85,19 @@
         triggerNewZone() {
             const free = this.grid.filter(cell => !cell.zone);
             if (free.length === 0) return;
-
             const count = Math.min(free.length, 10 + Math.floor(Math.random() * 8));
             free.sort((a, b) => {
                 const distA = Math.min(a.r, this.rows-a.r, a.c, this.cols-a.c);
                 const distB = Math.min(b.r, this.rows-b.r, b.c, this.cols-b.c);
                 return distA - distB + (Math.random() - 0.5) * 4;
             });
-
-            const selected = free.slice(0, count);
-            selected.forEach(cell => { cell.zone = true; });
+            free.slice(0, count).forEach(cell => { cell.zone = true; });
         }
 
-        animate() {
-            this.raf = requestAnimationFrame(ts => this.animate());
-            const now = performance.now();
-            const dt = now - this.lastTime;
-            this.lastTime = now;
+        update(ts) {
+            if (!this.isActive) return;
+            const dt = ts - this.lastTime;
+            this.lastTime = ts;
 
             this.nextTrigger -= dt;
             if (this.nextTrigger <= 0) {
@@ -114,23 +115,19 @@
         }
 
         draw() {
-            const ctx = this.canvas.getContext('2d');
+            const ctx = this.ctx;
             const { W, H, cellW, cellH } = this;
             ctx.clearRect(0, 0, W, H);
 
             const margin = 20;
             ctx.save();
-            ctx.beginPath();
-            ctx.rect(margin, margin, W - margin * 2, H - margin * 2);
-            ctx.clip(); 
+            ctx.beginPath(); ctx.rect(margin, margin, W - margin * 2, H - margin * 2); ctx.clip(); 
 
+            ctx.font = "400 12px 'Zen Kurenaido', serif";
+            ctx.fillStyle = 'rgba(220, 60, 60, 0.6)';
             this.infoLabels.forEach(lbl => {
-                ctx.save();
                 ctx.globalAlpha = lbl.opacity;
-                ctx.font = "400 12px 'Zen Kurenaido', serif";
-                ctx.fillStyle = 'rgba(200, 30, 30, 0.8)';
                 ctx.fillText(lbl.text, lbl.x, lbl.y);
-                ctx.restore();
             });
 
             ctx.lineWidth = 1;
@@ -142,17 +139,15 @@
 
                 ctx.save();
                 ctx.beginPath(); ctx.rect(x0, y0, cellW, cellH); ctx.clip();
-                
                 ctx.strokeStyle = `rgba(220, 60, 60, ${0.45 * p})`;
                 const stp = 8;
+                ctx.beginPath();
                 for (let o = -cellH; o < cellW; o += stp) {
-                    ctx.beginPath();
                     const sX = x0 + o;
-                    const sY = y0;
-                    ctx.moveTo(sX, sY);
-                    ctx.lineTo(sX + (x0+o+cellH - sX)*p, sY + (y0+cellH - sY)*p);
-                    ctx.stroke();
+                    ctx.moveTo(sX, y0);
+                    ctx.lineTo(sX + (x0+o+cellH - sX)*p, y0 + cellH*p);
                 }
+                ctx.stroke();
                 ctx.restore();
             });
             ctx.restore();
@@ -160,7 +155,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const section = document.querySelector('.profile-section'); 
-        if (section) window.battleRoyale = new BattleRoyale(section);
+        const section = document.getElementById('profile'); 
+        if (section) new BattleRoyale(section);
     });
 })();

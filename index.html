@@ -9,13 +9,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-	<script>
-
-	</script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="body-lock">
     <canvas id="grid-canvas"></canvas>
+    <!-- Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
     <nav class="nav-container">
         <div class="nav-content">
@@ -29,8 +28,6 @@
     </nav>
 
     <main class="main-content">
-
-        <!-- ヒーローセクション -->
         <section id="hero" class="v-section" data-grid="hero">
             <div class="hero-content">
                 <div class="marker-wrapper" data-marker-color="#000000">
@@ -40,19 +37,15 @@
             </div>
         </section>
 
-        <!-- つくったもの -->
         <section id="works" class="v-section" data-grid="grid">
             <div style="width:100%;">
                 <div class="marker-wrapper" data-marker-color="#000000">
                     <h2 style="font-size:3rem;margin-bottom:3rem;" class="marker-text">WORKS</h2>
                 </div>
-                <div id="works-grid" class="works-grid">
-                    <!--  -->
-                </div>
+                <div id="works-grid" class="works-grid"></div>
             </div>
         </section>
 
-        <!-- Profile: クソ簡素なやつ -->
         <section id="profile" class="v-section" data-grid="grid">
             <div class="profile-section">
                 <div class="profile-text">
@@ -67,7 +60,6 @@
             </div>
         </section>
 
-        <!-- Links -->
         <section id="links" class="v-section" data-grid="dots">
             <div class="links-section">
                 <div class="marker-wrapper" data-marker-color="#000000">
@@ -82,7 +74,6 @@
             </div>
         </section>
 
-        <!-- 回文と逆行するやつ　うーんTENET -->
         <section id="section-tenet" class="v-section cinematic-section" data-grid="grid">
             <div class="tenet-layout">
                 <div class="tenet-info">
@@ -97,7 +88,6 @@
             </div>
         </section>
 
-        <!-- BR（新世紀教育改革法） -->
         <section id="section-battle-royale" class="v-section cinematic-section" data-grid="diagonal">
             <div class="br-layout">
                 <div class="br-spacer"></div>
@@ -113,23 +103,14 @@
             </div>
         </section>
 
-        <!-- ── Ready Player 1: Easter Egg keys ──────────────────────────── -->
-        <section id="section-rp1" class="v-section cinematic-section" data-grid="dots">
-            <div class="rp1-content" style="text-align:center;position:relative;z-index:2;">
-                <div class="cinematic-label">RECV_03 // ARTIFACT_COLLECTION</div>
-            </div>
-        </section>
 
-        <!-- マーーーー！！（号泣） -->
         <section id="section-interstellar" class="v-section cinematic-section" data-grid="grid">
             <div class="interstellar-inner">
                 <div class="cinematic-label">RECORD_04 // SINGULARITY_SIGNAL</div>
-                
                 <div class="interstellar-hero">
                     <h1 class="interstellar-title">japanese-capital</h1>
                     <p class="interstellar-description">A high-fidelity project archives. Exploring the intersection of digital governance and artistic precision.</p>
                 </div>
-
                 <div class="observation-window">
                     <div class="observation-content">
                         <img src="https://japanese-capital.is-a.tokyo/ogp.png" crossorigin="anonymous" class="obs-image">
@@ -138,37 +119,18 @@
                             <span class="obs-status">SIGNAL_LOCKED</span>
                         </div>
                     </div>
-                    <!-- WebGL will wrap this -->
-                    <!-- WebGLって三人称単数現在では...? -->
-                    <!-- WebGL wills wrap this -->
-                    <!-- Willって助動詞だから-sつかないのでは...? -->
-                    <!-- WebGL is going to wrap this -->
                 </div>
-
                 <div class="interstellar-infobox">
-                    <div class="info-item">
-                        <span class="info-label">COORDINATES</span>
-                        <span class="info-value">10.04.1.25 // EINSTEIN_RING</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">TECHNOLOGY</span>
-                        <span class="info-value">WEBGL_SINGULARITY / SHADER_DISPLACEMENT</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">STATUS</span>
-                        <span class="info-value">OPERATIONAL_DATA_LINK</span>
-                    </div>
+                    <div class="info-item"><span class="info-label">COORDINATES</span><span class="info-value">10.04.1.25 // EINSTEIN_RING</span></div>
+                    <div class="info-item"><span class="info-label">TECHNOLOGY</span><span class="info-value">WEBGL_SINGULARITY / SHADER_DISPLACEMENT</span></div>
+                    <div class="info-item"><span class="info-label">STATUS</span><span class="info-value">OPERATIONAL_DATA_LINK</span></div>
                 </div>
-
                 <div class="interstellar-sub">PROJECT_HASH: 0x82f42e27 // SINGULARITY_OBSERVED</div>
             </div>
         </section>
 
-        <!-- ゼロ・グラヴィティ（the Escapists 2の脱出方法のひとつ） -->
-        <!-- 嘘です映画の方です -->
         <section id="section-zero-gravity" class="v-section cinematic-section" data-grid="dots">
             <div class="cinematic-label">RECORD_05 // TETHERED_DRIFT</div>
-            
             <div class="zg-layout">
                 <div class="zg-text-column">
                     <h2 class="zg-title">GRAVITATIONAL_DYNAMICS</h2>
@@ -178,53 +140,34 @@
                         <span>INTERACTION: INERTIAL_WHEEL</span>
                     </div>
                 </div>
-                
                 <div class="zg-spacer"></div>
-
                 <div class="zg-content-side">
                     <p class="zg-p-small">DATA_STREAM_01: CONNECTION_STABLE</p>
                     <p class="zg-p-small">DATA_STREAM_02: SIGNAL_DECAY_DETECTED</p>
                 </div>
             </div>
         </section>
-
     </main>
 
-    <!-- フッター -->
     <footer>
         <p>&copy; 2026 ARUIHA YORU. ALL RIGHTS RESERVED.</p>
     </footer>
 
     <!-- Core systems -->
-    <script src="interface-hud.js"></script>
-    <script src="text-reveal.js"></script>
-    <script src="grid-system.js"></script>
-    <script src="magnetic-ui.js"></script>
-    <script src="project-manager.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/system.js"></script>
+    <script src="js/interface-hud.js"></script>
+    <script src="js/text-reveal.js"></script>
+    <script src="js/grid-system.js"></script>
+    <script src="js/magnetic-ui.js"></script>
+    <script src="js/project-manager.js"></script>
 
     <!-- Cinema effects -->
-    <script src="tenet-physics.js"></script>
-    <script src="battle-royale.js"></script>
-    <script src="easter-egg.js"></script>
-    <script src="interstellar.js"></script>
-    <script src="zero-gravity.js"></script>
-    <script src="shining.js"></script>
-    <!-- absolute cinema -->
-    
-<script>
-(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if (urlParams.get('debug') !== 'true') {
-        document.documentElement.innerHTML = '';
-        
-        document.write('<body></body>'); 
-        
-        console.log('Debug mode is OFF. DOM has been cleared.');
-    } else {
-        console.log('Debug mode is ON. Content is preserved.');
-    }
-})();
-</script>
+    <script src="js/cinematic/tenet-physics.js"></script>
+    <script src="js/cinematic/battle-royale.js"></script>
+    <script src="js/cinematic/easter-egg.js"></script>
+    <script src="js/cinematic/interstellar.js"></script>
+    <script src="js/cinematic/zero-gravity.js"></script>
+    <script src="js/cinematic/shining.js"></script>
 </body>
 </html>

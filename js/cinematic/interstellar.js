@@ -1,7 +1,9 @@
+// もうTARSにコード書いてほしい
+
 (function () {
     'use strict';
 
-    // ミラーの惑星
+    // ミラーの惑星 (Audio Tick)
     class ChronoTick {
         constructor() {
             this.ctx = null;
@@ -9,16 +11,18 @@
         }
         init() {
             if (this.ctx) return;
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            try {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            } catch(e) {}
         }
         play() {
-            if (!this.ctx) return;
+            if (!this.ctx || !this.active) return;
             const now = this.ctx.currentTime;
             const gain = this.ctx.createGain();
             const osc = this.ctx.createOscillator();
             osc.frequency.setValueAtTime(100, now);
             osc.frequency.exponentialRampToValueAtTime(30, now + 0.1);
-            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.setValueAtTime(0.06, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
             osc.connect(gain); gain.connect(this.ctx.destination);
             osc.start(now); osc.stop(now + 0.12);
@@ -31,53 +35,43 @@
         }
         stop() { this.active = false; clearInterval(this.timerId); }
     }
+    // 話は変わりますけどインターステラーはなァ！！一つのフレーズを延々と使いまわしてるのが良いんだよ！！！！
 
     // Morse Signal (STAY)
-    // ぶれるような
     class StaySignal {
         constructor() {
-            // Morse信号: STAY
-            this.sequence = [
-				1,0,1,0,1, 0,0,0,                // S
-				1,1,1, 0,0,0,                    // T
-				1,0,1,1,1, 0,0,0,                // A
-				1,1,1,0,1,0,1,1,1,0,1,1,1, 0,0,0 // Y
-			];
+            this.sequence = [1,0,1,0,1,0,0,0,1,1,1,0,0,0,1,0,1,1,1,0,0,0,1,1,1,0,1,0,1,1,1,0,1,1,1,0,0,0];
             this.index = 0;
             this.target = 1.0; 
             this.phase = 1.0;
             this.active = false;
+            this.displayOpacity = 1;
+            this.lastOpacity = 1;
+            this.dirty = false;
         }
         tick() {
             if (!this.active) return;
             this.target = this.sequence[this.index] > 0 ? 1.0 : -1.0;
             this.index = (this.index + 1) % this.sequence.length;
-            setTimeout(() => this.tick(), 180);
+            this.timer = setTimeout(() => this.tick(), 180);
         }
         update() {
-            if (!this.active) return;
-            
             const diff = this.target - this.phase;
             this.phase += diff * 0.15;
-
-            // Add "Over-shoot" .....over-shootっていうらしいです。
-            const noise = (Math.random() - 0.5) * 0.2;
             if (Math.random() > 0.95) this.phase += (Math.random() - 0.5) * 1.5;
-
             this.displayOpacity = 0.4 + (Math.max(-1, Math.min(1, this.phase)) + 1) * 0.3;
-            if (this.displayOpacity > 1) this.displayOpacity = 1;
-
-            requestAnimationFrame(() => this.update());
+            
+            if (Math.abs(this.displayOpacity - this.lastOpacity) > 0.01) {
+                this.lastOpacity = this.displayOpacity;
+                this.dirty = true;
+            }
         }
-        start() { 
-            this.active = true; 
-            this.tick(); 
-            this.update(); 
-        }
-        stop() { this.active = false; }
+        start() { this.active = true; this.tick(); }
+        stop() { this.active = false; clearTimeout(this.timer); }
     }
+    // 本が落ちました
 
-    // 特異点ッ！！ブラックッ・ホールッ！！ （WebGL）
+    // 特異点ッッッッ！！！ブラックッ・ホールッ！！
     const FRAG = `
         precision highp float;
         varying vec2 v_uv;
@@ -85,58 +79,50 @@
         uniform vec2 u_mouse;
         uniform float u_intensity;
         uniform float u_aspect;
-
         void main() {
             vec2 uv = v_uv;
             vec2 m = u_mouse;
             vec2 diff = uv - m;
             diff.x *= u_aspect;
             float dist = length(diff);
-
             float rs = 0.18 * u_intensity;
             if (dist < rs * 0.4) {
                 gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
                 return;
             }
-
             float distortion = (rs * rs) / (dist * dist + 0.001);
             vec2 dUV = uv - (uv - m) * distortion;
-            
             vec4 texColor = texture2D(u_tex, dUV);
             float glow = exp(-dist * 12.0) * u_intensity;
             gl_FragColor = vec4(texColor.rgb + vec3(1.0, 0.7, 0.4) * glow, 1.0);
         }
     `;
-    // Xで言った、DOM版は本当に　ブラクラ判定で**また**規制されそうなのでまたいつかの期待に
-    //日本の刑法では、相手の意図に反してPCを制御不能にさせたりするプログラムは「ウイルス」なので。
     
     class InterstellarPortfolio {
         constructor(section) {
             this.section = section;
             this.inner = section.querySelector('.interstellar-inner');
             this.canvas = document.createElement('canvas');
-            this.gl = this.canvas.getContext('webgl', { alpha: false, antialias: false });
+            this.gl = this.canvas.getContext('webgl', { alpha: false, antialias: false, preserveDrawingBuffer: false, powerPreference: 'high-performance' });
             
             this.sourceCanvas = document.createElement('canvas');
             this.sCtx = this.sourceCanvas.getContext('2d', { alpha: false });
-            
-            // Cache canvas for static parts
-            // なんでtoじゃないんですかね（英語勉強中の或いは）
             this.cacheCanvas = document.createElement('canvas');
             this.cCtx = this.cacheCanvas.getContext('2d', { alpha: false });
             
             this.mouse = { x: 0.5, y: 0.5, curX: 0.5, curY: 0.5, targetI: 0 };
             this.intensity = 0;
+            this.isActive = false;
+            this.isDirty = true;
             this.signal = new StaySignal();
+            this.ticker = new ChronoTick();
+            
             this.init();
         }
 
         init() {
             this.canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;z-index:1;';
             this.section.insertBefore(this.canvas, this.section.firstChild);
-            
-            this.inner.style.opacity = '0';
-            this.inner.style.pointerEvents = 'none';
 
             const gl = this.gl;
             const program = gl.createProgram();
@@ -162,31 +148,39 @@
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-            window.addEventListener('resize', () => {
-                this.resize();
-                this.preRenderStatic();
+            window.ABS.registerCinematic('section-interstellar', {
+                start: () => { this.isActive = true; this.signal.start(); this.ticker.start(); this.isDirty = true; },
+                stop: () => { this.isActive = false; this.signal.stop(); this.ticker.stop(); }
             });
+
+            window.ABS.addHook({
+                onResize: () => { this.resize(); this.isDirty = true; },
+                onTick: () => this.render()
+            });
+
             this.section.addEventListener('mousemove', e => {
                 const rect = this.section.getBoundingClientRect();
                 this.mouse.curX = (e.clientX - rect.left) / rect.width;
                 this.mouse.curY = 1.0 - (e.clientY - rect.top) / rect.height;
                 this.mouse.targetI = 1.0;
-            });
+            }, { passive: true });
+            
             this.section.addEventListener('mouseleave', () => this.mouse.targetI = 0.0);
-            
+            document.addEventListener('mousedown', () => this.ticker.init(), { once: true });
+
             this.resize();
-            this.preRenderStatic();
-            this.render();
-            
-            // WebGLってJSのわりにむずすぎると思う
         }
 
         resize() {
+            const { w, h, dpr } = window.ABS.state.viewport;
             this.W = this.section.offsetWidth;
             this.H = this.section.offsetHeight;
-            this.canvas.width = this.sourceCanvas.width = this.cacheCanvas.width = this.W;
-            this.canvas.height = this.sourceCanvas.height = this.cacheCanvas.height = this.H;
-            this.gl.viewport(0, 0, this.W, this.H);
+            this.canvas.width = this.sourceCanvas.width = this.cacheCanvas.width = this.W * dpr;
+            this.canvas.height = this.sourceCanvas.height = this.cacheCanvas.height = this.H * dpr;
+            this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+            this.sCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            this.cCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            this.preRenderStatic();
         }
 
         preRenderStatic() {
@@ -195,15 +189,13 @@
             ctx.fillStyle = '#fafafc';
             ctx.fillRect(0, 0, W, H);
             
-            // Grid
-            ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+            ctx.strokeStyle = 'rgba(0,0,0,0.035)';
             ctx.lineWidth = 1;
             ctx.beginPath();
             for(let x=0; x<W; x+=40) { ctx.moveTo(x,0); ctx.lineTo(x,H); }
             for(let y=0; y<H; y+=40) { ctx.moveTo(0,y); ctx.lineTo(W,y); }
             ctx.stroke();
 
-            // Image
             const win = this.inner.querySelector('.observation-window');
             const img = win?.querySelector('.obs-image');
             if (win && img) {
@@ -211,7 +203,6 @@
                 const sR = this.section.getBoundingClientRect();
                 const x = r.left - sR.left;
                 const y = r.top - sR.top;
-
                 if (img.complete) {
                     ctx.save();
                     ctx.beginPath(); ctx.rect(x, y, r.width, r.height); ctx.clip();
@@ -219,22 +210,18 @@
                     const scale = Math.max(r.width/iw, r.height/ih);
                     ctx.drawImage(img, x+(r.width-iw*scale)/2, y+(r.height-ih*scale)/2, iw*scale, ih*scale);
                     ctx.restore();
-                } else {
-                    img.onload = () => this.preRenderStatic();
-                }
+                } else { img.onload = () => this.preRenderStatic(); }
             }
             
-            // Description
             ctx.textAlign = 'center';
             const desc = this.inner.querySelector('.interstellar-description')?.textContent || "";
             ctx.font = "400 0.95rem Inter, sans-serif";
             ctx.fillStyle = 'rgba(0,0,0,0.45)';
             ctx.fillText(desc, W/2, H*0.32);
 
-            // Infobox
             const infoItems = this.inner.querySelectorAll('.info-item');
             const infoY = H * 0.75;
-            const spacing = 320; 
+            const spacing = Math.min(W * 0.25, 320); 
             const startX = W/2 - (infoItems.length - 1) * spacing / 2;
             infoItems.forEach((item, i) => {
                 const label = item.querySelector('.info-label')?.textContent || "";
@@ -251,11 +238,8 @@
         captureContent() {
             const ctx = this.sCtx;
             const { W, H } = this;
-            
-            // Draw pre-rendered static content
-            ctx.drawImage(this.cacheCanvas, 0, 0);
+            ctx.drawImage(this.cacheCanvas, 0, 0, W, H);
 
-            // Dynamically render blinking Title
             ctx.textAlign = 'center';
             ctx.fillStyle = '#000';
             ctx.globalAlpha = this.signal.displayOpacity;
@@ -271,8 +255,20 @@
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.sourceCanvas);
         }
 
+        // マ～～～～～～～～！！！！（大号泣）
+        // ﾀﾝﾀｰﾝﾀﾝﾀｰﾝﾀﾝﾀｰﾝﾀﾝﾀｰﾝ（ハンス・ジマーのあれ）
         render() {
-            this.captureContent();
+            if (!this.isActive) return;
+            
+            this.signal.update();
+            if (this.signal.dirty) { this.isDirty = true; this.signal.dirty = false; }
+            if (Math.abs(this.mouse.curX - this.mouse.x) > 0.001) this.isDirty = true;
+
+            if (this.isDirty) {
+                this.captureContent();
+                this.isDirty = false;
+            }
+
             const gl = this.gl;
             this.mouse.x += (this.mouse.curX - this.mouse.x) * 0.12;
             this.mouse.y += (this.mouse.curY - this.mouse.y) * 0.12;
@@ -283,29 +279,11 @@
             gl.uniform1f(gl.getUniformLocation(this.prog, 'u_intensity'), this.intensity);
             gl.uniform1f(gl.getUniformLocation(this.prog, 'u_aspect'), this.W / this.H);
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-            requestAnimationFrame(() => this.render());
         }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         const section = document.getElementById('section-interstellar');
-        if (!section) return;
-
-        const ticker = new ChronoTick();
-        const portfolio = new InterstellarPortfolio(section);
-
-        const obs = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    ticker.start();
-                    portfolio.signal.start();
-                } else {
-                    ticker.stop();
-                    portfolio.signal.stop();
-                }
-            });
-        }, { threshold: 0.1 });
-        obs.observe(section);
-        document.addEventListener('mousedown', () => ticker.init(), { once: true });
+        if (section) new InterstellarPortfolio(section);
     });
 })();

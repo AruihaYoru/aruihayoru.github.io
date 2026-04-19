@@ -27,6 +27,10 @@ body {
     line-height: 1.6;
 }
 
+body.body-lock {
+    overflow: hidden;
+}
+
 /* Glassmorphism Navigation */
 .nav-container {
     position: fixed;
@@ -120,20 +124,19 @@ footer {
 }
 
 #shining-footer-bar-wrapper {
-    width: 80%;
-    max-width: 800px;
-    height: 16px;
+    width: 60%;
+    max-width: 600px;
+    height: 4px;
     background: rgba(0, 0, 0, 0.03);
-    border-radius: 20px;
+    border-radius: 4px;
     overflow: hidden;
-    border: 1px solid rgba(0,0,0,0.02);
+    margin-top: 1rem;
 }
 
 #shining-footer-bar-fill {
     height: 100%;
     width: 0;
-    background: #bbb; /* Sophisticated Grey */
-    border-radius: 20px;
+    background: #000;
     transition: width 0.1s linear;
 }
 
@@ -183,26 +186,29 @@ footer {
 }
 
 .tw-wrapper {
-    max-width: 800px;
-    width: 90%;
+    max-width: 900px;
+    width: 95%;
     z-index: 10;
+    padding: 10vh 40px;
+    background: #fff;
 }
 
 #tw-content {
-    font-family: 'Courier New', monospace;
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #444; 
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #000; 
     white-space: pre-wrap;
     display: block;
+    letter-spacing: -0.01em;
 }
 
 .tw-inline-icon {
-    width: 22px;
+    width: 18px;
     display: inline-block;
     vertical-align: middle;
-    margin-right: 12px;
-    opacity: 0.5;
+    margin: 0 8px 4px 0;
+    opacity: 0.8;
 }
 
 /* Shining Progress Bar */
@@ -410,11 +416,12 @@ footer {
 
 /* Footer style */
 footer {
-    padding: 4rem 20px;
+    padding: 12rem 20px;
     border-top: 1px solid var(--glass-border);
     text-align: center;
     color: var(--text-secondary);
     font-size: 0.8rem;
+    background: #fff;
 }
 
 @media (max-width: 900px) {
@@ -432,7 +439,43 @@ footer {
     .profile-text p {
         margin: 0 auto;
     }
+}
 
+@media (max-width: 600px) {
+    .works-grid {
+        grid-template-columns: 1fr;
+    }
+    .work-card.large, .work-card.medium {
+        grid-column: span 1;
+    }
+    .hero-title {
+        font-size: clamp(2.5rem, 12vw, 4rem);
+    }
+    .tenet-layout, .br-layout, .zg-layout {
+        flex-direction: column;
+        padding: 0 20px;
+        text-align: center;
+        gap: 2rem;
+    }
+    .tenet-info, .br-info, .zg-text-column, .zg-content-side {
+        flex: none;
+        width: 100%;
+        text-align: center;
+    }
+    .interstellar-infobox {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .zg-content-side {
+        padding-top: 1rem;
+    }
+    .observation-window {
+        aspect-ratio: 4 / 3;
+    }
+    .links-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
 }
 
 /* --- Interface HUD --- */
@@ -715,8 +758,32 @@ footer {
 
 #section-tenet { cursor: ns-resize; }
 #section-battle-royale { cursor: crosshair; }
-#section-rp1 { cursor: pointer; }
 #section-interstellar { cursor: default; }
 #section-zero-gravity { cursor: move; }
+
+/* --- Custom Scrollbar --- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
 
 

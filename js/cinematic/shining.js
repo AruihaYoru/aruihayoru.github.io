@@ -1,10 +1,9 @@
-/**
- * shining.js
- */
-
 (function () {
     'use strict';
 
+    // シャイニングはなあ.....迷路に逃げ込んだウェンディとかを
+    // どっかにあった「連動している迷路模型」から斧を振りかざすシーンがあったと思うんだけど
+    // なかった
     class ShiningInfinity {
         constructor() {
             this.footer = document.querySelector('footer');
@@ -12,8 +11,8 @@
             this.progressValue = 0;
             this.isUnlocked = false;
             this.boardCount = 0;
-            this.lastScrollY = window.scrollY;
             this.isTypewriterMode = false;
+            this.hexPatternCache = {}; 
             
             this.init();
         }
@@ -31,28 +30,17 @@
             this.container.id = 'shining-infinite-container';
             document.body.appendChild(this.container);
 
-            window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
-            this.animate();
+            window.ABS.addHook({
+                onScroll: (s) => this.handleScroll(s),
+                onTick: (t, state) => this.update(t, state)
+            });
         }
 
-        handleScroll() {
-            const currentScrollY = window.scrollY;
-            const viewH = window.innerHeight;
-            const docH = document.documentElement.scrollHeight;
-            const scrollBottom = currentScrollY + viewH;
-
-            if (!this.isUnlocked && scrollBottom > docH - 5) {
-                if (Math.abs(currentScrollY - this.lastScrollY) > 1) {
-                    this.progressValue = 0;
-                }
-            } else if (!this.isUnlocked) {
-                this.progressValue = 0;
-            }
-
-            this.lastScrollY = currentScrollY;
-
+        handleScroll(scroll) {
             if (this.isUnlocked && !this.isTypewriterMode) {
-                if (scrollBottom > docH - viewH * 0.2) {
+                const docH = document.documentElement.scrollHeight;
+                const viewH = window.ABS.state.viewport.h;
+                if (scroll.y + viewH > docH - viewH * 0.2) {
                     this.addBoard();
                 }
             }
@@ -74,58 +62,61 @@
             }
 
             if (this.boardCount >= 5) {
-                this.renderHoneycombCanvas(board, this.boardCount);
+                const ratio = Math.min(1, (this.boardCount - 4) / 8);
+                this.applyHexBackground(board, ratio);
             }
 
             this.container.appendChild(board);
         }
 
-        renderHoneycombCanvas(board, count) {
-            const canvas = document.createElement('canvas');
-            canvas.className = 'shining-hex-canvas';
-            board.appendChild(canvas);
-
-            const ctx = canvas.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-
-            canvas.width = w * dpr;
-            canvas.height = h * dpr;
-            ctx.scale(dpr, dpr);
-
-            const size = 38; 
-            const hexW = Math.sqrt(3) * size;
-            const rowH = 1.5 * size;
-            const cols = Math.ceil(w / hexW) + 2;
-            const rows = Math.ceil(h / rowH) + 2;
-            const ratio = Math.min(1, (count - 4) / 8);
-
-            ctx.strokeStyle = '#ddd';
-            ctx.lineWidth = 1;
-
-            for (let r = 0; r < rows; r++) {
-                const offsetX = (r % 2 === 1) ? hexW / 2 : 0;
-                for (let c = 0; c < cols; c++) {
-                    if (Math.random() > ratio) continue;
-                    const x = c * hexW + offsetX - hexW / 2;
-                    const y = r * rowH;
-                    this.drawHex(ctx, x, y, size);
-                }
+        applyHexBackground(board, ratio) {
+            // Optimization: Cache patterns by approximate ratio
+            const cacheKey = Math.floor(ratio * 10);
+            if (!this.hexPatternCache[cacheKey]) {
+                this.hexPatternCache[cacheKey] = this.generateHexPattern(ratio);
             }
+            board.style.backgroundImage = `url(${this.hexPatternCache[cacheKey]})`;
+            board.style.backgroundRepeat = 'repeat';
         }
 
-        drawHex(ctx, x, y, s) {
-            ctx.beginPath();
-            for (let i = 0; i < 6; i++) {
-                const angle = (Math.PI / 180) * (60 * i + 30);
-                const px = x + s * Math.cos(angle);
-                const py = y + s * Math.sin(angle);
-                if (i === 0) ctx.moveTo(px, py);
-                else ctx.lineTo(px, py);
+        generateHexPattern(ratio) {
+            const tempCanvas = document.createElement('canvas');
+            const size = 38;
+            const hexW = Math.sqrt(3) * size;
+            const rowH = 1.5 * size;
+            
+            // Pattern tile size
+            const dpr = 1; // Pattern doesn't need high dpr usuallyamless
+            tempCanvas.width = hexW * 2;
+            tempCanvas.height = rowH * 2;
+            const ctx = tempCanvas.getContext('2d');
+            
+            ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+            ctx.lineWidth = 1;
+
+            const drawHex = (x, y) => {
+                if (Math.random() > ratio) return;
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (Math.PI / 180) * (60 * i + 30);
+                    const px = x + size * Math.cos(angle);
+                    const py = y + size * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            };
+
+            // Draw a few overlapping hexes for a seamless pattern
+            for(let r=0; r<4; r++) {
+                const offsetX = (r % 2 === 1) ? hexW / 2 : 0;
+                for(let c=0; c<4; c++) {
+                    drawHex(c * hexW + offsetX - hexW, r * rowH - rowH);
+                }
             }
-            ctx.closePath();
-            ctx.stroke();
+
+            return tempCanvas.toDataURL();
         }
 
         triggerTypewriter() {
@@ -160,17 +151,17 @@
             type();
         }
 
-        animate() {
-            const currentScrollY = window.scrollY;
-            const viewH = window.innerHeight;
-            const docH = document.documentElement.scrollHeight;
-            const atBottom = (currentScrollY + viewH) > docH - 5;
+        update(time, state) {
+            if (this.isUnlocked) return;
 
-            if (atBottom && !this.isUnlocked) {
-                this.progressValue = Math.min(100, this.progressValue + 0.5);
+            const viewH = state.viewport.h;
+            const docH = document.documentElement.scrollHeight;
+            const atBottom = (state.scroll.y + viewH) > docH - 10;
+
+            if (atBottom) {
+                this.progressValue = Math.min(100, this.progressValue + 0.2); // Slowed down from 0.6
                 if (this.progressValue >= 100) {
                     this.isUnlocked = true;
-                    // Global flag to stop standard progress updates
                     window.shiningUnlocked = true; 
                     this.progressBarWrapper.style.opacity = '0';
                     setTimeout(() => {
@@ -178,10 +169,11 @@
                         this.addBoard(); 
                     }, 500);
                 }
+            } else {
+                this.progressValue = Math.max(0, this.progressValue - 0.4); // Slower decay too
             }
 
             this.progressBarFill.style.width = `${this.progressValue}%`;
-            requestAnimationFrame(() => this.animate());
         }
     }
 

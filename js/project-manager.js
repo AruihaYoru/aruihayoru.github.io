@@ -61,6 +61,11 @@ class ProjectManager {
             card.innerHTML = `
                 <div class="bg-accent"></div>
                 <div class="magnetic-inner">
+                    <div style="width: 100%; height: 160px; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                        <span style="font-size: 0.65rem; color: rgba(0,0,0,0.2); letter-spacing: 0.2em; font-weight: 600;">IMAGE_UNAVAILABLE</span>
+                        <!-- Shimmer effect for empty frame -->
+                        <div style="position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); animation: shimmer 3s infinite;"></div>
+                    </div>
                     <h3>${project.title}</h3>
                     <p>${project.description}</p>
                 </div>
