@@ -167,6 +167,8 @@
                     setTimeout(() => {
                         this.progressBarWrapper.style.display = 'none';
                         this.addBoard(); 
+                        // 鍵の再スポーンを試行
+                        if (window.easterEgg) window.easterEgg.spawnKeys();
                     }, 500);
                 }
             } else {

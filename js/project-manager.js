@@ -2,36 +2,42 @@ const PROJECTS = [
     {
         title: "ZUHYO",
         description: "A sophisticated geometric drafting editor for the modern web.",
+        tag: "Application",
         size: "large",
         strength: 0.05
     },
     {
-        title: "MONOCHROME SPACE",
+        title: "MONOCHROME",
         description: "Experimental grid system with dynamic scroll triggers.",
+        tag: "Motion",
         size: "medium",
         strength: 0.08
     },
     {
         title: "NEON CITY",
         description: "WebGL experiments in urban lighting.",
+        tag: "Creative",
         size: "normal",
         strength: 0.1
     },
     {
         title: "UI/UX",
         description: "Premium component exploration.",
+        tag: "Design",
         size: "normal",
         strength: 0.1
     },
     {
         title: "DIGITAL GARDEN",
         description: "A personal repository of thoughts and code snippets.",
+        tag: "Archive",
         size: "medium",
         strength: 0.08
     },
     {
         title: "QUANTUM",
         description: "Exploring the boundaries of physics and design.",
+        tag: "Core",
         size: "normal",
         strength: 0.1
     }
@@ -59,17 +65,32 @@ class ProjectManager {
             card.setAttribute('data-magnetic-threshold', '300'); // カードは大きいので広めに検知
 
             card.innerHTML = `
-                <div class="bg-accent"></div>
-                <div class="magnetic-inner">
-                    <div style="width: 100%; height: 160px; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
-                        <span style="font-size: 0.65rem; color: rgba(0,0,0,0.2); letter-spacing: 0.2em; font-weight: 600;">IMAGE_UNAVAILABLE</span>
-                        <!-- Shimmer effect for empty frame -->
-                        <div style="position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); animation: shimmer 3s infinite;"></div>
+                <div class="card-visual"></div>
+                <div class="magnetic-inner" style="width: 100%; height: 100%;">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="project-tag">${project.tag || 'Experimental'}</span>
+                            <span class="project-id">#${project.title.substring(0,3).toUpperCase()}_0${PROJECTS.indexOf(project) + 1}</span>
+                        </div>
+                        <div class="project-meta">
+                            <h3>${project.title}</h3>
+                            <p>${project.description}</p>
+                        </div>
+                        <div class="view-btn">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                        </div>
                     </div>
-                    <h3>${project.title}</h3>
-                    <p>${project.description}</p>
                 </div>
             `;
+
+            // マウス追従グラデーションのための変数更新
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--mouse-x', `${x}%`);
+                card.style.setProperty('--mouse-y', `${y}%`);
+            });
 
             fragment.appendChild(card);
         });
@@ -79,7 +100,7 @@ class ProjectManager {
         this.container.appendChild(fragment);
 
         // レンダリングが終わってから磁力システムッッ起動ッ！！
-        if (window.initMagnetic) window.initMagnetic();
+        if (window.magneticInstance) window.magneticInstance.refresh();
     }
 }
 

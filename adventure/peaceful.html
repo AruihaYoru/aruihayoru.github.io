@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure JS(WASM) - Peaceful Edition</title>
+    <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        canvas {
+            background-color: #000;
+            image-rendering: pixelated; /* Crisp pixels */
+            width: 640px; /* 2x scale */
+            height: 448px; /* 2x scale */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 4px;
+            transform: scaleY(-1); /* Flip vertically to match C++ coordinate system */
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #aaa;
+        }
+        kbd {
+            background: #333;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #fff;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="gameCanvas" width="320" height="224"></canvas>
+
+    <div class="controls">
+        <p>Movement: <kbd>Arrows</kbd> | Pickup/Drop: <kbd>Space</kbd> | Game Select: <kbd>Enter</kbd> | Reset: <kbd>R</kbd></p>
+        <p id="status">Loading Peaceful WASM...</p>
+    </div>
+
+    <!-- Compile emcc main.cpp Adventure.cpp -o adventure_peaceful.js -s EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' -s EXPORTED_FUNCTIONS='["_main", "_set_key", "_get_screen_buffer"]' -O3 -->
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+        
+        // Setup ImageData buffer
+        const imageData = ctx.createImageData(320, 224);
+
+        // Globals for C++ to call
+        window.crystal_key = 0;
+        let lastCrystalKey = 0;
+
+        window.renderAdventureFrame = function(wasmBufferView) {
+            if (!wasmBufferView) return;
+            
+            // wasmBufferView is already the Uint8ClampedArray
+            imageData.data.set(wasmBufferView);
+            ctx.putImageData(imageData, 0, 0);
+
+            // Check if crystal_key changed (Easter Egg entered!)
+            if (window.crystal_key !== lastCrystalKey) {
+                lastCrystalKey = window.crystal_key;
+                if (window.crystal_key === 0x01) {
+                    document.getElementById('status').innerText = "✨ Easter Egg Room Reached! (crystal_key = 1) ✨";
+                    document.getElementById('status').style.color = "#FFD84C";
+                    console.log("Easter egg room reached! crystal_key set to", window.crystal_key);
+                }
+            }
+        };
+
+        // --- Audio System ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const soundBuffers = {};
+        const soundFiles = {
+            0: 'sounds/won.wav',
+            1: 'sounds/roar.wav',
+            2: 'sounds/eaten.wav',
+            3: 'sounds/dragondie.wav',
+            4: 'sounds/putdown.wav',
+            5: 'sounds/pickup.wav'
+        };
+
+        async function loadSounds() {
+            console.log("Starting sound load...");
+            for (const [id, url] of Object.entries(soundFiles)) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const arrayBuffer = await response.arrayBuffer();
+                    soundBuffers[id] = await audioCtx.decodeAudioData(arrayBuffer);
+                    console.log(`Loaded sound: ${url}`);
+                } catch (e) {
+                    console.error("Failed to load sound:", url, e);
+                }
+            }
+        }
+        loadSounds();
+
+        window.playAdventureSound = function(soundId) {
+            console.log("Request to play sound ID:", soundId);
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().then(() => {
+                    console.log("AudioContext resumed");
+                    playSound(soundId);
+                });
+            } else {
+                playSound(soundId);
+            }
+        };
+
+        function playSound(soundId) {
+            if (soundBuffers[soundId]) {
+                const source = audioCtx.createBufferSource();
+                source.buffer = soundBuffers[soundId];
+                source.connect(audioCtx.destination);
+                source.start(0);
+                console.log("Playing sound buffer:", soundId);
+            } else {
+                console.warn("Sound buffer not found for ID:", soundId);
+            }
+        }
+
+        // Keyboard events
+        window.addEventListener('keydown', (e) => {
+            if (!window.Module || !window.Module._set_key) return;
+            // Prevent default scrolling for arrows and space
+            if ([32, 37, 38, 39, 40].includes(e.keyCode)) {
+                e.preventDefault();
+            }
+            window.Module._set_key(e.keyCode, true);
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (!window.Module || !window.Module._set_key) return;
+            window.Module._set_key(e.keyCode, false);
+        });
+
+        // WASM Module config
+        var Module = {
+            onRuntimeInitialized: function() {
+                document.getElementById('status').innerText = "Game Running";
+            }
+        };
+    </script>
+    <script async src="adventure_peaceful.js"></script>
+</body>
+</html>

@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!-- THE "QUARTZKEY" is in the "adventure". if you are the "gamer", You must finding the key.-->
+<!-- if you are the "dull boy", spell 'window.easterEgg.spawnQuartzKey()'. -->
+<!-- 他二つの鍵は普通に「そこら辺の石をめくればあるような」ものです。jade_keyはまあ　その「石」にたどり着くのがキツいんですけど -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -38,11 +41,12 @@
         </section>
 
         <section id="works" class="v-section" data-grid="grid">
-            <div style="width:100%;">
+            <div style="width:100%; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
                 <div class="marker-wrapper" data-marker-color="#000000">
-                    <h2 style="font-size:3rem;margin-bottom:3rem;" class="marker-text">WORKS</h2>
+                    <h2 class="section-title marker-text">SELECTED WORKS</h2>
                 </div>
-                <div id="works-grid" class="works-grid"></div>
+                <p class="section-sub text-reveal" style="margin-top: 1rem; color: var(--text-secondary); letter-spacing: 0.1em; font-size: 0.8rem;">CURATED PROJECTS // 2024-2026</p>
+                <div id="works-grid" class="works-grid" style="margin-top: 4rem;"></div>
             </div>
         </section>
 
@@ -84,13 +88,24 @@
                         <span>LOGIC: REVERSIBLE_GRAVITY</span>
                     </div>
                 </div>
+                <div class="tenet-visual cinematic-visual">
+                    <div class="cinematic-image-container">
+                        <img src="asset/writter.png" alt="Entropy Analysis" class="cinematic-image">
+                        <div class="image-overlay-scanline"></div>
+                    </div>
+                </div>
                 <div class="cinematic-label">RECORD_01 // ENTROPY_INVERSION</div>
             </div>
         </section>
 
         <section id="section-battle-royale" class="v-section cinematic-section" data-grid="diagonal">
             <div class="br-layout">
-                <div class="br-spacer"></div>
+                <div class="br-visual cinematic-visual">
+                    <div class="cinematic-image-container">
+                        <img src="asset/writter.png" alt="Zone Restriction" class="cinematic-image">
+                        <div class="image-overlay-scanline"></div>
+                    </div>
+                </div>
                 <div class="br-info">
                     <h2 class="br-title">ZONE_RESTRICTION</h2>
                     <p class="br-p">Simulating a diminishing battlefield. An automated grid-control system that periodically isolates sectors through procedural hatch-shading.</p>
@@ -147,6 +162,81 @@
                 </div>
             </div>
         </section>
+
+        <section id="section-adventure" class="v-section cinematic-section" data-grid="grid" style="position: relative; overflow: hidden;">
+            <div class="cinematic-label">RECORD_06 // LEGACY_WASM_PORT</div>
+            
+            <div class="adventure-layout">
+                <div class="adventure-info">
+                    <h2 class="zg-title">SYSTEM_PORT_//_ADVENTURE</h2>
+                    <p class="zg-p">An exploratory port of a classic C++ game engine into the modern web ecosystem. By compiling C++ to WebAssembly (WASM) via Emscripten, we achieve native execution speeds with direct memory buffer transfers to the HTML5 Canvas.</p>
+                    <div class="zg-specs">
+                        <span>REPOSITORY: ARUIHAYORU/ADVENTURE</span>
+                        <span>COMPILATION: C++17 TO WASM_32</span>
+                        <span>RENDERING: DIRECT_BUFFER_COPY</span>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; font-size: 0.85rem; color: rgba(0,0,0,0.6); line-height: 1.8;">
+                        <p style="font-weight:700; margin-bottom: 0.5rem; letter-spacing: 0.1em;">// HOW_TO_PLAY</p>
+                        <p>MOVEMENT: <kbd class="adv-kbd">ARROWS</kbd> or <kbd class="adv-kbd">D-PAD</kbd></p>
+                        <p>INTERACT: <kbd class="adv-kbd">SPACE</kbd> or <kbd class="adv-kbd">ACT</kbd></p>
+                        <p>SELECT: <kbd class="adv-kbd">ENTER</kbd> or <kbd class="adv-kbd">ENT</kbd> &nbsp;|&nbsp; RESET: <kbd class="adv-kbd">R</kbd> or <kbd class="adv-kbd">RST</kbd></p>
+                    </div>
+                </div>
+                
+                <div class="adventure-game-wrapper">
+                    <div id="adventure-game-container">
+                        <canvas id="gameCanvas" width="320" height="224" style="width: 100%; height: 100%; image-rendering: pixelated; transform: scaleY(-1);"></canvas>
+                        
+                        <div id="adventure-overlay">
+                            <div style="font-size: 1.5rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 1.5rem;">SYS_READY</div>
+                            <button id="adventure-play-btn">ACTIVATE LINK (PLAY)</button>
+                            <div id="adventure-status">Loading WASM Core...</div>
+                        </div>
+
+                        <!-- Mobile Controls (Overlay) -->
+                        <div id="mobile-controls" class="game-pad-overlay">
+                            <div class="m-dpad-container">
+                                <div class="m-dpad">
+                                    <div class="m-btn m-dir m-up" data-key="38"><svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg></div>
+                                    <div class="m-btn m-dir m-left" data-key="37"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg></div>
+                                    <div class="m-btn m-dir m-down" data-key="40"><svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></div>
+                                    <div class="m-btn m-dir m-right" data-key="39"><svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+                                    <div class="m-dpad-center"></div>
+                                </div>
+                            </div>
+                            <div class="m-actions">
+                                <div class="m-sub-actions">
+                                    <button class="m-btn m-small m-reset" data-key="82" title="Reset">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
+                                    </button>
+                                    <button class="m-btn m-small m-enter" data-key="13" title="Enter">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M360-240 120-480l240-240 56 56-144 144h488v-160h80v240H272l144 144-56 56Z"/></svg>
+                                    </button>
+                                </div>
+                                <button class="m-btn m-act" data-key="32">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M160-360v-240h80v160h480v-160h80v240H160Z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="quartz-key-container" style="min-height: 60px; margin-top: 1rem; display: flex; justify-content: center; align-items: center;"></div>
+                </div>
+            </div>
+            
+            <div class="todo-paper">
+                <div class="todo-title">TODO: Easter Egg</div>
+                <ul class="todo-list">
+                    <li>1. FIND WHITE KEY</li>
+                    <li>2. ENTER THE WHITE CASTLE</li>
+                    <li>3. CARRY BRIDGE & FIND BLACK KEY</li>
+                    <li>4. ENTER THE BLACK CASTLE</li>
+                    <li>5. USE BRIDGE & FIND GRAY-DOT</li>
+                    <li>6. CARRY GRAY-DOT TO SECRET ROOM</li>
+                </ul>
+            </div>
+        </section>
     </main>
 
     <footer>
@@ -171,5 +261,6 @@
     <script src="js/cinematic/interstellar.js"></script>
     <script src="js/cinematic/zero-gravity.js"></script>
     <script src="js/cinematic/shining.js"></script>
+    <script src="js/cinematic/adventure.js"></script>
 </body>
 </html>

@@ -32,6 +32,12 @@ window.ABS = (function() {
         cacheViewport();
         setupEvents();
         startLoop();
+        
+        // オリジナルの最大スクロール量を記録（Shining等で増える前）
+        setTimeout(() => {
+            state.originalMaxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        }, 1000);
+
         console.log('ABS_SYSTEM: Online // DPR:', state.viewport.dpr);
     }
 

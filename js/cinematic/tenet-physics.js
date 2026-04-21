@@ -51,6 +51,7 @@
                     justify-content: center;
                     width: ${this.charSize}px;
                     height: ${this.charSize}px;
+                    pointer-events: none;
                 `;
                 this.container.appendChild(el);
                 this.elements.push(el);
@@ -84,9 +85,30 @@
 
         computeTargets() {
             const spacing = this.charSize * 1.8;
-            // 70%の位置にシフト
-            const ox = (this.W * 0.7) - (2 * spacing); 
-            const oy = (this.H * 0.5) - (2 * spacing);
+            const isPortrait = this.H > this.W;
+            
+            let ox, oy;
+            
+            const visualEl = this.section.querySelector('.tenet-visual');
+            if (visualEl && !isPortrait) {
+                const sectionRect = this.section.getBoundingClientRect();
+                const visualRect = visualEl.getBoundingClientRect();
+                const centerX = visualRect.left - sectionRect.left + visualRect.width / 2;
+                const centerY = visualRect.top - sectionRect.top + visualRect.height / 2;
+                ox = centerX - (2 * spacing);
+                oy = centerY - (2 * spacing);
+            } else if (isPortrait) {
+                // Center horizontally, position lower to avoid text
+                ox = (this.W * 0.5) - (2 * spacing);
+                oy = (this.H * 0.7) - (2 * spacing);
+            } else {
+                // Fallback Desktop
+                const containerW = Math.min(1100, this.W);
+                const startX = (this.W - containerW) / 2;
+                ox = startX + 775 - (2 * spacing);
+                oy = (this.H * 0.5) - (2 * spacing);
+            }
+
             this.targetPositions = [];
             for (let r = 0; r < 5; r++) {
                 for (let c = 0; c < 5; c++) {
@@ -122,14 +144,41 @@
         runSimulation() {
             this.bodies = [];
             const spacing = this.charSize * 1.8;
-            const ox = (this.W * 0.7) - (2 * spacing); 
-            const oy = (this.H * 0.5) - (2 * spacing);
+            const isPortrait = this.H > this.W;
+            
+            let ox, oy;
+            
+            const visualEl = this.section.querySelector('.tenet-visual');
+            if (visualEl && !isPortrait) {
+                const sectionRect = this.section.getBoundingClientRect();
+                const visualRect = visualEl.getBoundingClientRect();
+                const centerX = visualRect.left - sectionRect.left + visualRect.width / 2;
+                const centerY = visualRect.top - sectionRect.top + visualRect.height / 2;
+                ox = centerX - (2 * spacing);
+                oy = centerY - (2 * spacing);
+            } else if (isPortrait) {
+                ox = (this.W * 0.5) - (2 * spacing);
+                oy = (this.H * 0.7) - (2 * spacing);
+            } else {
+                const containerW = Math.min(1100, this.W);
+                const startX = (this.W - containerW) / 2;
+                ox = startX + 775 - (2 * spacing);
+                oy = (this.H * 0.5) - (2 * spacing);
+            }
 
-            //左下寄り
+            // We will define the logical center for the simulation
+            const cx = ox + 2 * spacing;
+            const cy = oy + 2 * spacing;
+
             const epicenter = { 
-                x: ox + 1.2 * spacing, 
-                y: oy + 3.8 * spacing 
+                x: cx + 1.8 * spacing, 
+                y: cy + 1.8 * spacing 
             };
+
+            const wallThickness = 100;
+            const leftWall = Bodies.rectangle(-wallThickness / 2, this.H / 2, wallThickness, this.H * 2, { isStatic: true });
+            const rightWall = Bodies.rectangle(this.W + wallThickness / 2, this.H / 2, wallThickness, this.H * 2, { isStatic: true });
+            World.add(this.engine.world, [leftWall, rightWall]);
 
             CHARS.forEach((char, i) => {
                 const target = this.targetPositions[i];
@@ -137,8 +186,9 @@
                 
                 const body = Bodies.rectangle(target.x, target.y, this.charSize, this.charSize, {
                     frictionAir: 0.12, 
-                    restitution: 0.4,
-                    mass: mass
+                    restitution: 0.8,
+                    mass: mass,
+                    collisionFilter: { group: -1 }
                 });
 
                 const dx = body.position.x - epicenter.x;
@@ -161,9 +211,10 @@
 
             for (let i = 0; i < this.totalFrames; i++) {
                 this.bodies.forEach(b => {
+                    // Store relative to the initial simulation center (cx, cy)
                     b.history.push({
-                        x: b.body.position.x,
-                        y: b.body.position.y,
+                        rx: b.body.position.x - cx,
+                        ry: b.body.position.y - cy,
                         a: b.body.angle
                     });
                 });
@@ -181,31 +232,26 @@
             const viewH = window.innerHeight;
             const centerOffset = (rect.top + rect.height / 2) - (viewH / 2);
             const dist = Math.abs(centerOffset);
-            const coreThreshold = viewH * 0.2;
+            const convergeThreshold = viewH * 0.75;
+            const explodeThreshold = viewH * 0.45;
 
             if (this.isActive) {
-                if (dist < coreThreshold) {
+                const isMovingAway = (centerOffset > 0 && state.scroll.delta < 0) || 
+                                     (centerOffset < 0 && state.scroll.delta > 0);
+
+                if (isMovingAway && dist > explodeThreshold) {
+                    this.targetFrame = this.totalFrames - 1;
+                } else if (!isMovingAway && dist < convergeThreshold) {
                     this.targetFrame = 0;
-                } else {
-                    const isMovingAway = (centerOffset > 0 && state.scroll.delta < 0) || 
-                                         (centerOffset < 0 && state.scroll.delta > 0);
-                    if (isMovingAway) this.targetFrame = this.totalFrames - 1;
-                    else if (state.scroll.delta !== 0) this.targetFrame = 0;
                 }
             } else {
                 this.targetFrame = this.totalFrames - 1;
             }
 
-            let speed = 1.2;
+            let speed = 1.8;
             if (this.targetFrame === 0) {
-                // 収束時
-                if (this.currentFrame > this.totalFrames * 0.8) {
-                    speed = 7.5; // 超高速スナップ
-                } else if (this.currentFrame > this.totalFrames * 0.5) {
-                    speed = 3.2; // 中速加速
-                } else {
-                    speed = 1.4; // 最終的な滑らかな収束
-                }
+                if (this.currentFrame > this.totalFrames * 0.6) speed = 8.0; 
+                else if (this.currentFrame > this.totalFrames * 0.25) speed = 3.5;
             }
 
             if (this.currentFrame > this.targetFrame) this.currentFrame = Math.max(this.targetFrame, this.currentFrame - speed);
@@ -216,16 +262,33 @@
             const f2 = Math.ceil(frameIdx);
             const ratio = frameIdx - f1;
 
+            // Calculate current center based on the latest viewport size and layout
+            const spacing = this.charSize * 1.8;
+            let currentCx, currentCy;
+            
+            const isPortrait = this.H > this.W;
+            if (isPortrait) {
+                currentCx = this.W * 0.5;
+                currentCy = this.H * 0.7;
+            } else {
+                const containerW = Math.min(1100, this.W);
+                const startX = (this.W - containerW) / 2;
+                currentCx = startX + 775;
+                currentCy = this.H * 0.5;
+            }
+
             this.bodies.forEach((b, i) => {
                 const s1 = b.history[f1];
                 const s2 = b.history[f2];
                 if (!s1 || !s2) return;
 
-                const x = s1.x + (s2.x - s1.x) * ratio;
-                const y = s1.y + (s2.y - s1.y) * ratio;
+                const rx = s1.rx + (s2.rx - s1.rx) * ratio;
+                const ry = s1.ry + (s2.ry - s1.ry) * ratio;
                 const a = s1.a + (s2.a - s1.a) * ratio;
 
-                // DOM positioning: Center the element on the (x, y) point
+                const x = currentCx + rx;
+                const y = currentCy + ry;
+
                 this.elements[i].style.transform = `translate3d(${x - this.charSize/2}px, ${y - this.charSize/2}px, 0) rotate(${a}rad)`;
             });
         }

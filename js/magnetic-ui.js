@@ -14,6 +14,25 @@ class MagneticUI {
     }
 
     init() {
+        this.refresh();
+
+        document.addEventListener('mousemove', (e) => {
+            this.mouseX = e.clientX;
+            this.mouseY = e.clientY;
+        }, { passive: true });
+
+        if (window.ABS) {
+            window.ABS.addHook({
+                onTick: () => this.update(),
+                onResize: () => this.refreshRects(),
+                onScroll: () => this.refreshRects()
+            });
+        }
+
+        this.refreshRects();
+    }
+
+    refresh() {
         const elements = document.querySelectorAll('[data-magnetic]');
         
         this.targets = Array.from(elements).map(el => {
@@ -30,18 +49,6 @@ class MagneticUI {
                 currentY: 0
             };
         });
-
-        document.addEventListener('mousemove', (e) => {
-            this.mouseX = e.clientX;
-            this.mouseY = e.clientY;
-        }, { passive: true });
-
-        window.ABS.addHook({
-            onTick: () => this.update(),
-            onResize: () => this.refreshRects(),
-            onScroll: () => this.refreshRects()
-        });
-
         this.refreshRects();
     }
 
