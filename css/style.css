@@ -878,6 +878,16 @@ footer {
     color: rgba(0,0,0,0.85);
 }
 
+.tenet-clipper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    pointer-events: none;
+    z-index: 10;
+    transform: scale(3.0);
+    transform-origin: top right;
+}
+
 .tenet-p, .br-p {
     font-size: 1.1rem;
     color: rgba(0,0,0,0.5);

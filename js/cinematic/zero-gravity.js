@@ -120,7 +120,7 @@
             container.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:2;';
             this.section.appendChild(container);
 
-            const menu = ['INITIALIZE_SEQ', 'GRAV_DRIVE', 'COMM_LINK', 'O2_STABILIZE', 'EJECT_PROTOCOL'];
+            const menu = ['noconf init', 'noconf connect username@host', 'noconf check', 'noconf deploy', 'noconf start'];
             this.navEls = [];
             menu.forEach((text, i) => {
                 const el = document.createElement('div');
