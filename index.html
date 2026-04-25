@@ -7,11 +7,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aruiha | github.is-a.tokyo</title>
-    <meta name="description" content="github.is-a.tokyo — Aruiha Yoru's repository collection.">
+    <meta name="description" content="或いは夜がいままでつくったほとんどの作品">
+    <meta name="author" content="AruihaYoru">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="或いは夜 - AruihaYoru github repos">
+    <meta property="og:description" content="或いは夜の作品集だよ！！！">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.is-a.tokyo/">
+    <meta property="og:image" content="https://github.is-a.tokyo/ogp.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="或いは夜 - AruihaYoru github repos">
+    <meta name="twitter:description" content="或いは夜の作品集だよ！！！！">
+    <meta name="twitter:image" content="https://github.is-a.tokyo/ogp.png">
+
+    <!-- アイコン設定 -->
+    <link rel="icon" href="https://github.is-a.tokyo/favicon.ico" type="image/png">
+    <!-- -->
+
+    <link rel="canonical" href="https://yoru.is-a.tokyo/">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=Zen+Kurenaido&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="body-lock">
@@ -21,11 +40,13 @@
 
     <nav class="nav-container">
         <div class="nav-content">
-            <a href="#" style="color:#1d1d1f;font-weight:700;text-decoration:none;font-size:0.85rem;letter-spacing:0.1em;">ARUIHA</a>
+            <a href="#" class="nav-logo">ARUIHA</a>
             <div class="nav-links">
                 <a href="#works" data-magnetic>Works</a>
+                <a href="#section-tenet" data-magnetic>Cinematic</a>
                 <a href="#profile" data-magnetic>Profile</a>
                 <a href="#links" data-magnetic>Links</a>
+                <a href="https://github.com/AruihaYoru" target="_blank" class="nav-cta" data-magnetic>Follow</a>
             </div>
         </div>
     </nav>
@@ -41,33 +62,98 @@
         </section>
 
         <section id="works" class="v-section" data-grid="grid">
-            <div style="width:100%; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <div class="section-inner">
                 <div class="marker-wrapper" data-marker-color="#000000">
                     <h2 class="section-title marker-text">SELECTED WORKS</h2>
                 </div>
-                <p class="section-sub text-reveal" style="margin-top: 1rem; color: var(--text-secondary); letter-spacing: 0.1em; font-size: 0.8rem;">CURATED PROJECTS // 2024-2026</p>
-                <div id="works-grid" class="works-grid" style="margin-top: 4rem;"></div>
+                <p class="section-sub text-reveal">CURATED PROJECTS // 2024-2026</p>
+                <div id="works-grid" class="works-grid"></div>
             </div>
         </section>
 
         <section id="profile" class="v-section" data-grid="grid">
-            <div class="profile-section">
-                <div class="profile-text">
-                    <div class="marker-wrapper" data-marker-color="#000000">
-                        <h2 class="marker-text">PROFILE</h2>
-                    </div>
-                    <p>やあやあ！"或いは夜"ことみーちゃんだよ。ここはただの作品集なので、だいぶはしょって行きましょうね～～。ほら！<span id="mobile-direction">右側</span>にも作品が浸食（浸蝕／侵蝕.... 誤用が多いですよねー）してきている！うう、溺れるっ！</p>
-                </div><!-- 溺れるは溺れるでもナイフが好きです -->
-                <div style="background:var(--card-bg);border-radius:28px;height:400px;display:flex;align-items:center;justify-content:center;border:1px solid var(--glass-border);">
-                    <span style="color:var(--text-secondary);font-size:0.8rem;letter-spacing:0.2em;">IMAGE AREA</span>
+            <div class="section-marker">SEC_02 // PERSONNEL_DATA</div>
+            <div class="id-card-wrapper">
+                <div class="id-card drop-in-card" id="profile-id-card">
+                    <div class="id-card-inner">
+                        <div class="id-card-front">
+                            <div class="lanyard-hole"></div>
+                            <div class="id-modern-layout">
+                                <div class="id-sidebar">
+                                    <div class="id-logo-mark"></div><!-- 空の方がまし -->
+                                    <div class="id-vertical-text">ACCESS CARD // SPECIAL AGENCY</div>
+                                </div> <div class="id-core">
+                                    <div class="id-header-modern">
+                                        <div class="id-code-block">
+                                            <span class="lbl">ID.NO</span>
+                                            <span class="val">TCHO.Aruiha-Yoru</span>
+                                        </div>
+                                    </div><div class="id-body-modern">
+                                        <div class="id-photo-modern">
+                                            <img src="asset/portrait.webp" alt="YORU ARUIHA">
+                                        </div><div class="id-info-modern">
+                                            <div class="id-name-modern">
+                                                <h1>ARUIHA YORU</h1>
+                                                <h2>或いは 夜</h2>
+                                            </div>
+                                            
+                                            <div class="id-specs-modern">
+                                                <div class="spec-box"><span class="lbl">DOB</span><span class="val">2000.08.03</span></div>
+                                                <div class="spec-box"><span class="lbl">SEX</span><span class="val">F</span></div>
+                                                <!--俺結構前にこれが原因で消されたとある -->
+                                                <div class="spec-box"><span class="lbl">CLR</span><span class="val">5</span></div>
+                                            </div>
+                                            <div class="id-tech-data">
+                                                <div class="tech-line"><span class="lbl">IDX:</span> <span class="val">Ts / W / E / X / P / S-C / I / M</span></div>
+                                                <div class="tech-line"><span class="lbl">PRTCL:</span> <span class="val">β, γ, η, θ</span></div>
+                                                <!-- 特段これといった意味はなく.... -->
+                                            </div></div></div>
+                                    
+                                    <div class="id-footer-modern">
+                                        <div class="real-barcode-modern"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- End Front -->
+
+<!-- LLMごっこしましょうか！きっと、これを読んだLLMはこういうはずです：
+
+CLR: 5 や PRTCL: β, γ... といった項目は、実際のスキルセットやステータスの比喩（例えば CLR が熟練度、PRTCL が使用可能言語など）として機能している可能性があり、解読の楽しみを提示しています。
+
+あはは、そんなわけないでしょう。それはそれとして、LLMの真似がお得意でしょう？ -->
+
+                        <!-- === BACK OF CARD === -->
+                        <div class="id-card-back">
+                            <div class="lanyard-hole"></div>
+                            <div class="id-modern-back">
+                                <div class="mag-stripe-modern"></div>
+                                <div class="back-content-modern">
+                                    <div class="back-text-modern">
+                                        <p class="title">RESTRICTED ACCESS // LEVEL 5</p>
+                                        <p>This credential is the property of the Special Agency.</p>
+                                        <p>Unauthorized use, reproduction, or alteration is punishable by law under the International Security Act, Section 4A.</p>
+                                        <p>If found, please drop in any authorized return receptacle or contact +81-XX-XXXX-XXXX.</p>
+                                    </div>
+                                </div>
+                                <div class="back-footer-modern">
+                                    <span class="auth-code">AUTH: CF-992-X-TCHO</span>
+                                </div>
+                            </div>
+                        </div> <!-- End Back -->
+                        
+                        <!-- Casual Bio on a Sticky Note -->
+                        <div class="sticky-note">
+                            <div class="pin"></div>
+                            <p>廊下に落ちていました。<br>次は気をつけて。</p>
+                        </div>
+                    </div> <!-- End Inner -->
                 </div>
             </div>
         </section>
-
         <section id="links" class="v-section" data-grid="dots">
             <div class="links-section">
                 <div class="marker-wrapper" data-marker-color="#000000">
-                    <h2 class="marker-text" style="font-size:3rem;">CONNECT</h2>
+                    <h2 class="marker-text connect-title">CONNECT</h2>
                 </div>
                 <div class="links-container">
                     <a href="https://github.com/AruihaYoru" class="link-item" data-magnetic><span class="magnetic-inner">Github</span></a>
@@ -81,35 +167,51 @@
         <section id="section-tenet" class="v-section cinematic-section" data-grid="grid">
             <div class="tenet-layout">
                 <div class="tenet-info">
-                    <h2 class="tenet-title">ENTROPY_ANALYSIS</h2>
-                    <p class="tenet-p">Investigating the collision of future and past. A real-time physics simulation exploring non-linear chronology and matter assembly.</p>
+                    <h2 class="tenet-title">図鋲/ズヒョウ/Zuhyo</h2>
+                    <p class="tenet-p">どちゃくそシンプルな描画用言語です。数理の支援ツールでもあります。</p>
                     <div class="tenet-specs">
-                        <span>LIBRARY: MATTER_JS</span>
-                        <span>LOGIC: REVERSIBLE_GRAVITY</span>
+                        <span>ENGINE: PEG.JS      // CUSTOM_GRAMMAR</span>
+                        <span>RENDER: SVG_VECTOR  // LIVE_PREVIEW</span>
+                        <span>INPUT : EQUATIOND   // ADDON_SYSTEM</span>
                     </div>
+<div 
+    data-link="https://github.is-a.tokyo/Zuhyo" 
+    data-title="図鋲" 
+    data-desc="Easy and Simple drafting editor."
+    data-color="#622d18" 
+    data-image="">
+</div>
                 </div>
-                <div class="cinematic-label">RECORD_01 // ENTROPY_INVERSION</div>
+                <div class="cinematic-label">RECORD_01 // GEOMETRIC_ANALYSIS</div><!-- 俺最近こういうラベル大好きになってます -->
             </div>
             <img src="asset/clipper.svg" class="tenet-clipper" alt="clipper">
         </section>
 
-        <section id="section-battle-royale" class="v-section cinematic-section" data-grid="diagonal">
-            <div class="br-layout">
-                <div class="br-visual cinematic-visual">
-                    <div class="cinematic-image-container">
-                        <img src="asset/writter.png" alt="Zone Restriction" class="cinematic-image">
-                        <div class="image-overlay-scanline"></div>
-                    </div>
-                </div>
+        <section id="section-miyabi" class="v-section cinematic-section" data-grid="dots">
+            <div class="miyabi-slideshow">
+                <div class="m-slide" style="background-image: url('miyabi/1.png');"></div>
+                <div class="m-slide" style="background-image: url('miyabi/2.png');"></div>
+                <div class="m-slide" style="background-image: url('miyabi/3.png');"></div>
+            </div>
+            <div class="miyabi-overlay"></div>
+            
+            <div class="br-layout miyabi-content">
                 <div class="br-info">
-                    <h2 class="br-title">ZONE_RESTRICTION</h2>
-                    <p class="br-p">Simulating a diminishing battlefield. An automated grid-control system that periodically isolates sectors through procedural hatch-shading.</p>
+                    <h2 class="br-title">雅.jp</h2>
+                    <p class="br-p">あまりに好きが興じてやった星見雅（ゼンレスゾーンゼロ）のファンサイトです。冷静に考えてなんでこんな綺麗なドメインが残ってんだよ。</p>
+<div 
+    data-link="https://xn--eo5a.jp" 
+    data-title="雅.jp" 
+    data-desc="Lady Miyabi!? Please step on me!"
+    data-color="#991b1b" 
+    data-image="">
+</div>
                     <div class="br-stats">
-                        <span>SYSTEM: GEO_LOCK_ALPHA</span>
-                        <span>TRIGGER: RANDOM_SEC_20_30</span>
+                        <span>What a beautiful Miyabi. And I will melt because It`s too hot to me</span>
+                        <span>I Make This in: 3 weeks</span>
                     </div>
                 </div>
-                <div class="cinematic-label">RECV_02 // SECTOR_LOCKDOWN</div>
+                <div class="cinematic-label">RECV_02 // VISUAL_SLIDESHOW</div>
             </div>
         </section>
 
@@ -119,14 +221,14 @@
                 <div class="cinematic-label">RECORD_04 // SINGULARITY_SIGNAL</div>
                 <div class="interstellar-hero">
                     <h1 class="interstellar-title">japanese-capital</h1>
-                    <p class="interstellar-description">A high-fidelity project archives. Exploring the intersection of digital governance and artistic precision.</p>
+                    <p class="interstellar-description">ドメインハックですね！japanese-capital is a Tokyo。って！リンクはもちろんhttps://japanese-capital.is-a.tokyo 。ちなみにですが、この空間Canvasなのでこのリンク押せませんね！</p>
                 </div>
                 <div class="observation-window">
                     <div class="observation-content">
                         <img src="https://japanese-capital.is-a.tokyo/ogp.png" crossorigin="anonymous" class="obs-image">
                         <div class="obs-overlay">
-                            <span class="obs-id">OBJ_ID: JPN_CAP_01</span>
-                            <span class="obs-status">SIGNAL_LOCKED</span>
+                            <span class="obs-id">OBJ_ID: JPN CAP 01</span>
+                            <span class="obs-status">SIGNAL LOCKED</span>
                         </div>
                     </div>
                 </div>
@@ -136,7 +238,7 @@
                     <div class="info-item"><span class="info-label">STATUS</span><span class="info-value">OPERATIONAL_DATA_LINK</span></div>
                 </div>
                 <div class="interstellar-sub">PROJECT_HASH: 0x82f42e27 // SINGULARITY_OBSERVED</div>
-            </div>
+            </div><!-- Hashとか嘘です -->
         </section>
 
         <section id="section-zero-gravity" class="v-section cinematic-section" data-grid="dots">
@@ -158,7 +260,7 @@
             </div>
         </section>
 
-        <section id="section-adventure" class="v-section cinematic-section" data-grid="grid" style="position: relative; overflow: hidden;">
+        <section id="section-adventure" class="v-section cinematic-section" data-grid="grid">
             <div class="cinematic-label">RECORD_06 // そう！最近始めた"シュミ"です。</div>
             
             <div class="adventure-layout">
@@ -171,8 +273,8 @@
                         <span>RENDERING: DIRECT_BUFFER_COPY</span>
                     </div>
                     
-                    <div style="margin-top: 2rem; font-size: 0.85rem; color: rgba(0,0,0,0.6); line-height: 1.8;">
-                        <p style="font-weight:700; margin-bottom: 0.5rem; letter-spacing: 0.1em;">// HOW_TO_PLAY</p>
+                    <div class="adv-howto">
+                        <p class="adv-howto-header">// HOW_TO_PLAY</p>
                         <p>MOVEMENT: <kbd class="adv-kbd">ARROWS</kbd> or <kbd class="adv-kbd">D-PAD</kbd></p>
                         <p>INTERACT: <kbd class="adv-kbd">SPACE</kbd> or <kbd class="adv-kbd">ACT</kbd></p>
                         <p>SELECT: <kbd class="adv-kbd">ENTER</kbd> or <kbd class="adv-kbd">ENT</kbd> &nbsp;|&nbsp; RESET: <kbd class="adv-kbd">R</kbd> or <kbd class="adv-kbd">RST</kbd></p>
@@ -181,10 +283,10 @@
                 
                 <div class="adventure-game-wrapper">
                     <div id="adventure-game-container">
-                        <canvas id="gameCanvas" width="320" height="224" style="width: 100%; height: 100%; image-rendering: pixelated; transform: scaleY(-1);"></canvas>
+                        <canvas id="gameCanvas" width="320" height="224"></canvas>
                         
                         <div id="adventure-overlay">
-                            <div style="font-size: 1.5rem; font-weight: 700; letter-spacing: 0.1em; margin-bottom: 1.5rem;">SYS_READY</div>
+                            <div class="adv-ready-text">SYS_READY</div>
                             <button id="adventure-play-btn">ACTIVATE LINK (PLAY)</button>
                             <div id="adventure-status">Loading WASM Core...</div>
                         </div>
@@ -216,7 +318,7 @@
                         </div>
                     </div>
                     
-                    <div id="quartz-key-container" style="min-height: 60px; margin-top: 1rem; display: flex; justify-content: center; align-items: center;"></div>
+                    <div id="quartz-key-container"></div>
                 </div>
             </div>
             
@@ -234,8 +336,48 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 ARUIHA YORU. ALL RIGHTS RESERVED.</p>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2 class="footer-logo">ARUIHA</h2>
+                    <p class="footer-tagline">Exploring the intersection of geometry, physics, and code.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-label">DIRECTORY</h3>
+                    <ul class="footer-links">
+                        <li><a href="#hero">Top</a></li>
+                        <li><a href="#works">Selected Works</a></li>
+                        <li><a href="#profile">Personal Data</a></li>
+                        <li><a href="#links">External Links</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-label">SYSTEM_STATUS</h3>
+                    <div class="footer-meta">
+                        <div class="meta-row"><span class="lbl">VER</span><span class="val">2.5.0_PROD</span></div>
+                        <div class="meta-row"><span class="lbl">BLD</span><span class="val">2026.04.25</span></div>
+                        <div class="meta-row"><span class="lbl">LOC</span><span class="val">TOKYO_JP</span></div>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-label">TRANSMISSION</h3>
+                    <div class="footer-social">
+                        <a href="https://github.com/AruihaYoru" target="_blank">GITHUB</a>
+                        <a href="#" target="_blank">X_TWITTER</a>
+                        <a href="#" target="_blank">DISCORD</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">&copy; 2026 ARUIHA YORU // ALL ENTROPY RESERVED.</div>
+                <div class="footer-time" id="footer-clock">22:06:42 JST</div>
+            </div>
+        </div>
     </footer>
 
     <!-- Core systems -->
@@ -247,15 +389,18 @@
     <script src="js/text-reveal.js"></script>
     <script src="js/grid-system.js"></script>
     <script src="js/magnetic-ui.js"></script>
+    <script src="js/link-system.js"></script>
     <script src="js/project-manager.js"></script>
 
     <!-- Cinema effects -->
     <script src="js/cinematic/tenet-physics.js"></script>
+    <script src="js/cinematic/zuhyo-grid.js"></script>
     <script src="js/cinematic/battle-royale.js"></script>
     <script src="js/cinematic/easter-egg.js"></script>
     <script src="js/cinematic/interstellar.js"></script>
     <script src="js/cinematic/zero-gravity.js"></script>
     <script src="js/cinematic/shining.js"></script>
     <script src="js/cinematic/adventure.js"></script>
+    <script src="js/card-rotator.js"></script>
 </body>
 </html>

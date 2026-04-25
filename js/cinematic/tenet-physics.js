@@ -15,10 +15,11 @@
             this.targetPositions = [];
             this.isActive = false;
             this.charSize = 42;
-            this.totalFrames = 120;
-            this.currentFrame = 119; 
-            this.targetFrame = 119;
-            
+            this.totalFrames = 300;
+            this.currentFrame = 299;
+            this.targetFrame = 299;
+            this.epicenterOffset = { x: 0, y: 2.5 }; // 爆発の中心位置オフセット（spacing単位）
+
             ({ Engine, Bodies, Body, World, Vector } = window.Matter);
             this.init();
         }
@@ -58,13 +59,13 @@
             });
 
             window.ABS.registerCinematic('section-tenet', {
-                start: () => { 
-                    this.isActive = true; 
+                start: () => {
+                    this.isActive = true;
                     if (window.ABS.state.scroll.delta > 0) this.targetFrame = 0;
                     else this.targetFrame = this.totalFrames - 1;
                 },
-                stop: () => { 
-                    this.isActive = false; 
+                stop: () => {
+                    this.isActive = false;
                 }
             });
 
@@ -86,9 +87,9 @@
         computeTargets() {
             const spacing = this.charSize * 1.8;
             const isPortrait = this.H > this.W;
-            
+
             let ox, oy;
-            
+
             const visualEl = this.section.querySelector('.tenet-visual');
             if (visualEl && !isPortrait) {
                 const sectionRect = this.section.getBoundingClientRect();
@@ -99,8 +100,8 @@
                 oy = centerY - (2 * spacing);
             } else if (isPortrait) {
                 // Center horizontally, position lower to avoid text
-                ox = (this.W * 0.5) - (2 * spacing);
-                oy = (this.H * 0.7) - (2 * spacing);
+                ox = (this.W * 0.1) - (2 * spacing);
+                oy = (this.H * 0.8) - (2 * spacing);
             } else {
                 // Fallback Desktop
                 const containerW = Math.min(1100, this.W);
@@ -131,8 +132,8 @@
             tCtx.textAlign = 'center';
             tCtx.textBaseline = 'middle';
             tCtx.fillStyle = '#000';
-            tCtx.fillText(char, size/2, size/2);
-            
+            tCtx.fillText(char, size / 2, size / 2);
+
             const pixels = tCtx.getImageData(0, 0, size, size).data;
             let area = 0;
             for (let i = 3; i < pixels.length; i += 4) {
@@ -145,9 +146,9 @@
             this.bodies = [];
             const spacing = this.charSize * 1.8;
             const isPortrait = this.H > this.W;
-            
+
             let ox, oy;
-            
+
             const visualEl = this.section.querySelector('.tenet-visual');
             if (visualEl && !isPortrait) {
                 const sectionRect = this.section.getBoundingClientRect();
@@ -170,9 +171,9 @@
             const cx = ox + 2 * spacing;
             const cy = oy + 2 * spacing;
 
-            const epicenter = { 
-                x: cx + 1.8 * spacing, 
-                y: cy + 1.8 * spacing 
+            const epicenter = {
+                x: cx + this.epicenterOffset.x * spacing,
+                y: cy + this.epicenterOffset.y * spacing
             };
 
             const wallThickness = 100;
@@ -183,25 +184,30 @@
             CHARS.forEach((char, i) => {
                 const target = this.targetPositions[i];
                 const mass = this.calculateCharMass(char);
-                
+
                 const body = Bodies.rectangle(target.x, target.y, this.charSize, this.charSize, {
-                    frictionAir: 0.12, 
-                    restitution: 0.8,
+                    frictionAir: 0.1, // 空気抵抗
+                    restitution: 1.0, // 
                     mass: mass,
                     collisionFilter: { group: -1 }
                 });
 
                 const dx = body.position.x - epicenter.x;
                 const dy = body.position.y - epicenter.y;
-                const dist = Math.sqrt(dx*dx + dy*dy) || 0.1;
-                
-                const shockwavePower = Math.max(0, 1 - (dist / 1000));
-                const forceBase = (110 + Math.random() * 40) * shockwavePower;
-                const noise = () => (Math.random() - 0.5) * 0.2;
-                
+                const dist = Math.sqrt(dx * dx + dy * dy) || 0.1;
+
+                const shockwavePower = Math.max(0, 1 - (dist / 1200));
+                const forceBase = (280 + Math.random() * 100) * shockwavePower;
+                const noise = () => (Math.random() - 0.5) * 0.4;
+
+                // 指向性バイアス
+                const biasX = 0.7;  // 右方向
+                const biasY = -0.5; // 上方向
+                const biasStrength = 0.4;
+
                 Body.setVelocity(body, {
-                    x: ((dx / dist) + noise()) * forceBase,
-                    y: ((dy / dist) + noise()) * forceBase
+                    x: ((dx / dist) * (1 - biasStrength) + biasX * biasStrength + noise()) * forceBase,
+                    y: ((dy / dist) * (1 - biasStrength) + biasY * biasStrength + noise()) * forceBase
                 });
                 Body.setAngularVelocity(body, (Math.random() - 0.5) * 2.2);
 
@@ -232,12 +238,12 @@
             const viewH = window.innerHeight;
             const centerOffset = (rect.top + rect.height / 2) - (viewH / 2);
             const dist = Math.abs(centerOffset);
-            const convergeThreshold = viewH * 0.75;
-            const explodeThreshold = viewH * 0.45;
+            const convergeThreshold = viewH * 0.9;
+            const explodeThreshold = viewH * 0.25;
 
             if (this.isActive) {
-                const isMovingAway = (centerOffset > 0 && state.scroll.delta < 0) || 
-                                     (centerOffset < 0 && state.scroll.delta > 0);
+                const isMovingAway = (centerOffset > 0 && state.scroll.delta < 0) ||
+                    (centerOffset < 0 && state.scroll.delta > 0);
 
                 if (isMovingAway && dist > explodeThreshold) {
                     this.targetFrame = this.totalFrames - 1;
@@ -248,11 +254,14 @@
                 this.targetFrame = this.totalFrames - 1;
             }
 
-            let speed = 1.8;
+            let speed = 2.5; // 等速（ベース速度）
             if (this.targetFrame === 0) {
-                if (this.currentFrame > this.totalFrames * 0.6) speed = 8.0; 
-                else if (this.currentFrame > this.totalFrames * 0.25) speed = 3.5;
+                // 逆再生時：最初の40% (300から180) は爆速、残りの60% (180から0) は等速
+                if (this.currentFrame > this.totalFrames * 0.6) {
+                    speed = 18.0; 
+                }
             }
+            // もう5日前のロジックだからね　いい加減覚えてない　LLMさまさますぎる
 
             if (this.currentFrame > this.targetFrame) this.currentFrame = Math.max(this.targetFrame, this.currentFrame - speed);
             else if (this.currentFrame < this.targetFrame) this.currentFrame = Math.min(this.targetFrame, this.currentFrame + speed);
@@ -265,7 +274,7 @@
             // Calculate current center based on the latest viewport size and layout
             const spacing = this.charSize * 1.8;
             let currentCx, currentCy;
-            
+
             const isPortrait = this.H > this.W;
             if (isPortrait) {
                 currentCx = this.W * 0.5;
@@ -289,7 +298,7 @@
                 const x = currentCx + rx;
                 const y = currentCy + ry;
 
-                this.elements[i].style.transform = `translate3d(${x - this.charSize/2}px, ${y - this.charSize/2}px, 0) rotate(${a}rad)`;
+                this.elements[i].style.transform = `translate3d(${x - this.charSize / 2}px, ${y - this.charSize / 2}px, 0) rotate(${a}rad)`;
             });
         }
     }

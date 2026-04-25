@@ -1,8 +1,8 @@
 :root {
     --bg-color: #ffffff;
-    --card-bg: rgba(245, 245, 247, 0.7);
+    --card-bg: rgba(245, 245, 247, 0.9);
     --text-primary: #1d1d1f;
-    --text-secondary: #86868b;
+    --text-secondary: #6e6e73;
     --accent-color: #000000;
     --glass-border: rgba(0, 0, 0, 0.05);
     --nav-height: 48px;
@@ -62,15 +62,43 @@ body.body-lock {
 }
 
 .nav-links a {
-    color: var(--text-secondary);
+    color: var(--text-primary);
     text-decoration: none;
-    font-size: 0.75rem;
-    font-weight: 400;
-    transition: color 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: opacity 0.3s ease;
+}
+
+.nav-cta {
+    background: #000;
+    color: #fff !important;
+    padding: 0.4rem 1.1rem;
+    border-radius: 20px;
+    font-size: 0.8rem !important;
+    transition: transform 0.3s ease, background 0.3s ease, opacity 0.3s ease !important;
+}
+
+.nav-cta:hover {
+    transform: translateY(-2px);
+    background: #333;
+    opacity: 1 !important;
+}
+
+.nav-links a:hover {
+    opacity: 0.6;
 }
 
 .nav-links a:hover {
     color: var(--text-primary);
+}
+
+/* Nav Logo */
+.nav-logo {
+    color: #1d1d1f;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
 }
 
 /* Base Canvas for Background Grid */
@@ -92,7 +120,28 @@ body.body-lock {
        これにより、各セクションがビューポート(vh)と完全に一致し、
        text-reveal.js の中央検知仕様が正確に機能するようになります。
     */
-    padding: 0 20px;
+    padding: 0;
+}
+
+/* Reusable centered content wrapper */
+.section-inner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* Section subtitle (Works / Connect etc.) */
+.section-sub {
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+}
+
+/* Connect section heading */
+.connect-title {
+    font-size: 3rem;
 }
 
 .v-section {
@@ -101,15 +150,29 @@ body.body-lock {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 5vh 0;
+    padding: 12vh 0;
     min-width: 100vw;
     margin: 0 auto;
+    position: relative;
+}
+
+.section-marker {
+    position: absolute;
+    top: 5vh;
+    left: 40px;
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: rgba(0,0,0,0.2);
+    letter-spacing: 0.2em;
+    padding-left: 15px;
+    border-left: 2px solid rgba(0,0,0,0.1);
 }
 
 /* Cinematic sections should be full width for immersion */
 .v-section.cinematic-section {
     max-width: none;
-    width: 100%;
+    width: 100vw;
+    padding: 0;
 }
 
 /* --- The Shining: Monochrome Honeycomb --- */
@@ -250,44 +313,456 @@ footer {
     text-transform: uppercase;
 }
 
-/* Profile Section (10%) */
-.profile-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+/* --- ID Card Profile Section (JIS Standard Physical Card) --- */
+.id-card-wrapper {
+    perspective: 1500px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+    margin: 5vh 0;
+}
+
+.id-card {
+    /* Strict JIS Size ratio (ISO/IEC 7810 ID-1) 85.60 : 53.98 */
+    width: 100%;
+    max-width: 856px;
+    aspect-ratio: 856 / 539.8;
+    box-sizing: border-box;
+    position: relative;
+    perspective: 2000px;
+    z-index: 5;
+    background: transparent; /* Fix peeling issue */
+    border: none;
+    
+    /* Placing animation properties */
+    opacity: 0;
+    transform: translateZ(200px) scale(1.1) rotateX(15deg) translateY(50px);
+    transition: all 1.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.id-card.is-placed {
+    opacity: 1;
+    /* Slanted physical placement */
+    transform: translateZ(0) scale(1) rotate(-2.5deg);
+}
+
+.id-card-inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+    box-shadow: 0 50px 100px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.05);
+    border-radius: 32px;
+}
+
+.id-card.is-flipped .id-card-inner {
+    transform: rotateY(180deg);
+}
+
+.id-card-front, .id-card-back {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 32px;
+    overflow: hidden;
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    background: #e8e8e8; /* Slightly more muted/realistic plastic color */
+    border: 1px solid rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.id-card-front {
+    transform: rotateY(0deg);
+}
+
+.id-card-back {
+    transform: rotateY(180deg);
+    background: repeating-linear-gradient(135deg, #e0e0e0 0px, #e0e0e0 4px, #e8e8e8 4px, #e8e8e8 8px);
+}
+
+/* Subtle plastic reflection */
+.id-card-front::before, .id-card-back::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 150%; height: 150%;
+    background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba(255,255,255,0.6) 30%,
+        transparent 40%
+    );
+    transform: translate(-100%, -100%);
+    pointer-events: none;
+    transition: transform 1.5s ease;
+    z-index: 10;
+}
+
+/* Subtle hallway scuff marks */
+.id-card-front::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(0,0,0,0.02) 0%, transparent 10%),
+        radial-gradient(circle at 80% 20%, rgba(0,0,0,0.01) 0%, transparent 15%);
+    pointer-events: none;
+    z-index: 11;
+}
+
+.id-card.is-placed .id-card-front::before,
+.id-card.is-placed .id-card-back::before {
+    transform: translate(50%, 50%);
+}
+
+/* --- MODERN MINIMALIST FRONT STYLES --- */
+.id-modern-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    color: #111;
+    font-family: 'Inter', sans-serif;
+}
+
+.id-sidebar {
+    width: 65px;
+    background: #991b1b;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    width: 90vw;
-    height: 90vh;
+    padding: 2.5rem 0;
+    flex-shrink: 0;
+}
+.id-logo-mark {
+    writing-mode: vertical-rl;
+    font-weight: 900;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+}
+.id-vertical-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    opacity: 0.9;
 }
 
-.section-title {
-    font-size: clamp(2.5rem, 8vw, 4rem);
+.id-core {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 3rem;
+    position: relative;
+    background: radial-gradient(circle at 100% 100%, rgba(0,0,0,0.03) 0%, transparent 60%);
+}
+
+.id-header-modern {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid #111;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+.id-code-block {
+    display: flex;
+    flex-direction: column;
+}
+.id-code-block .lbl {
+    font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1;
+    color: #991b1b;
+    letter-spacing: 0.1em;
+}
+.id-code-block .val {
+    font-family: monospace;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
 }
 
-.profile-text h2 {
-    font-size: 3rem;
+.id-level-circle {
+    width: 52px;
+    height: 52px;
+    background: #111;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.id-body-modern {
+    display: flex;
+    gap: 3.5rem;
+    flex: 1;
+}
+
+.id-photo-modern {
+    width: 200px;
+    height: 266px; /* 3:4 aspect ratio */
+    background: #ccc;
+    position: relative;
+    border: 3px solid #111;
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
+}
+.id-photo-modern img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.15);
+}
+.id-photo-modern::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+    pointer-events: none;
+}
+
+.id-info-modern {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.id-name-modern h1 {
+    font-size: 3.2rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-bottom: 0.5rem;
+    color: #111;
+}
+.id-name-modern h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #666;
+    letter-spacing: 0.25em;
     margin-bottom: 2rem;
 }
 
-.profile-text p {
+.id-specs-modern {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+.spec-box {
+    display: flex;
+    flex-direction: column;
+}
+.spec-box .lbl {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #888;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.05em;
+}
+.spec-box .val {
     font-size: 1.25rem;
-    color: var(--text-secondary);
-    max-width: 500px;
+    font-family: monospace;
+    font-weight: 700;
+    color: #111;
 }
 
+.id-tech-data {
+    margin-top: auto;
+    font-family: monospace;
+    font-size: 0.85rem;
+    border: 1px solid #ddd;
+    border-left: 4px solid #991b1b;
+    padding: 1.2rem;
+    background: #fafafa;
+}
+.tech-line {
+    display: flex;
+    margin-bottom: 0.5rem;
+}
+.tech-line:last-child { margin-bottom: 0; }
+.tech-line .lbl {
+    color: #991b1b;
+    width: 75px;
+    font-weight: 800;
+}
+.tech-line .val {
+    color: #333;
+    font-weight: 700;
+}
+
+.id-footer-modern {
+    margin-top: 2rem;
+}
+.real-barcode-modern {
+    height: 40px;
+    width: 100%;
+    background: repeating-linear-gradient(90deg, #111 0, #111 2px, transparent 2px, transparent 4px, #111 4px, #111 5px, transparent 5px, transparent 8px, #111 8px, #111 12px, transparent 12px, transparent 14px, #111 14px, #111 15px, transparent 15px, transparent 18px);
+    opacity: 0.9;
+}
+
+/* --- MODERN MINIMALIST BACK STYLES --- */
+.id-modern-back {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: #fdfdfd;
+}
+.mag-stripe-modern {
+    width: 100%;
+    height: 85px;
+    background: #111;
+    margin-top: 3.5rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+}
+.back-content-modern {
+    padding: 3rem;
+    display: flex;
+    flex: 1;
+    gap: 3rem;
+}
+.back-text-modern {
+    flex: 1;
+    font-family: monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #555;
+}
+.back-text-modern .title {
+    font-weight: 800;
+    color: #991b1b;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+}
+.back-text-modern p {
+    margin-bottom: 0.8rem;
+}
+.back-footer-modern {
+    padding: 1.5rem 3rem;
+    border-top: 1px solid #ddd;
+    text-align: right;
+    font-family: monospace;
+    font-weight: 800;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* --- Sticky Note --- */
+.sticky-note {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 280px;
+    background: #fdfbae;
+    padding: 1.5rem;
+    box-shadow: 2px 10px 30px rgba(0,0,0,0.15);
+    transform: rotate(6deg) translateZ(50px);
+    font-family: 'Zen Kurenaido', 'Inter', sans-serif;
+    color: #1a1a1a;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    z-index: 10;
+    border-bottom-right-radius: 60px 10px;
+    /* Found on floor effect */
+    border-left: 1px solid rgba(0,0,0,0.05);
+    background-image: radial-gradient(at 10% 90%, rgba(0,0,0,0.03) 0%, transparent 30%);
+    /* Make sure it completely vanishes when the card flips */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Lanyard Punch Hole */
+.lanyard-hole {
+    position: absolute;
+    top: 25px;
+    width: 70px;
+    height: 14px;
+    border-radius: 7px;
+    /* Simulate a hole showing the dark background or depth */
+    background: #111;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 1px 1px rgba(255,255,255,0.5);
+    z-index: 10;
+}
+.id-card-front .lanyard-hole {
+    right: 30px;
+}
+.id-card-back .lanyard-hole {
+    left: 30px;
+}
+
+.sticky-note::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 20px;
+    background: rgba(255,255,255,0.4);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.id-card-wrapper {
+    /* Set relative so sticky note stays in wrapper bounds */
+    position: relative;
+}
+
+@media (max-width: 900px) {
+    .id-card {
+        /* JSで拡大縮小と回転を制御するため、CSSでのサイズ上書きを廃止 */
+        flex: none;
+        width: 856px !important;
+        height: 539.8px !important;
+        max-width: none !important;
+    }
+
+    .id-card.is-placed {
+        /* JS (card-rotator.js) が transform を動的に計算します */
+    }
+
+    /* フリップ（裏返し）時も、90度回転の状態を維持したまま Y軸回転させる */
+    .id-card.is-flipped .id-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .sticky-note {
+        /* カードが回転しているため、付箋の位置を調整 */
+        right: 20px;
+        bottom: 20px;
+        transform: rotate(-5deg) translateZ(50px);
+    }
+
+    /* Hide HUD on small screens so it doesn't overlap the card */
+    #interface-hud {
+        display: none !important;
+    }
+}
+
+
 /* Bento Grid for Works */
+/* max-width / margin / padding は親の .section-inner が担う */
 .works-grid {
     width: 100%;
-    max-width: 1200px;
-    margin: 4rem auto 0;
+    margin-top: 4rem;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: 180px;
-    gap: 1.5rem;
-    padding: 0 20px;
+    grid-auto-rows: 200px;
+    gap: 2.5rem;
 }
 
 .work-card {
@@ -394,11 +869,12 @@ footer {
 }
 
 .work-card p {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    line-height: 1.65;
     max-width: 90%;
-    opacity: 0.8;
+    font-weight: 450;
+    letter-spacing: -0.01em;
 }
 
 /* Hover States */
@@ -428,6 +904,12 @@ footer {
     color: #fff;
 }
 
+/* magnetic-inner が card の全領域を占める */
+.card-fill {
+    width: 100%;
+    height: 100%;
+}
+
 /* Visual elements inside cards */
 .card-visual {
     position: absolute;
@@ -438,14 +920,23 @@ footer {
     height: 120%;
     pointer-events: none;
     z-index: 1;
+    /* 画像ありの場合の共通設定 */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.4;
+    transition: opacity 0.3s, all 0.8s ease;
+}
+
+/* 画像なし（装飾のみ）の場合は薄く */
+.card-visual:not([style]) {
     opacity: 0.05;
-    transition: all 0.8s ease;
 }
 
 .work-card:hover .card-visual {
-    opacity: 0.1;
+    opacity: 0.8;
     transform: translate(-50%, -50%) scale(1.05);
 }
+
 
 .view-btn {
     position: absolute;
@@ -499,53 +990,202 @@ footer {
     opacity: 0.6;
 }
 
-/* Footer style */
-footer {
-    padding: 12rem 20px;
-    border-top: 1px solid var(--glass-border);
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 0.8rem;
+/* --- New Footer Design --- */
+.site-footer {
     background: #fff;
+    padding: 8rem 0 4rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-primary);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 6rem;
+}
+
+.footer-brand .footer-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+}
+
+.footer-tagline {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 240px;
+}
+
+.footer-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+    opacity: 0.5;
+}
+
+.footer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-family: monospace;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.4rem;
+}
+
+.meta-row .lbl { color: var(--text-secondary); }
+.meta-row .val { font-weight: 600; }
+
+.footer-social {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.footer-social a {
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+.footer-social a:hover {
+    transform: translateX(4px);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid #f0f0f0;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.footer-time {
+    font-family: monospace;
 }
 
 @media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-content {
+        padding: 0 24px;
+    }
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 900px) {
+    #mobile-erase { display: none; }
+    
+    .nav-content {
+        padding: 1.5rem 24px;
+        justify-content: center;
+    }
+    .nav-links {
+        display: none; /* シンプルにするためモバイルでは一旦非表示 */
+    }
+    .section-inner {
+        padding: 0 24px;
+    }
     .works-grid {
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto;
+        grid-auto-rows: 220px;
+        gap: 1.5rem;
     }
-    .work-card.large, .work-card.medium {
+    /* 全カードを2列幅・2行高に統一 */
+    .work-card.large,
+    .work-card.medium,
+    .work-card.normal {
         grid-column: span 2;
+        grid-row: span 2;
     }
     .profile-section {
         grid-template-columns: 1fr;
-        text-align: center;
+        text-align: left;
+        gap: 3rem;
+        height: auto;
     }
     .profile-text p {
-        margin: 0 auto;
+        margin: 0;
     }
 }
 
 @media (max-width: 600px) {
     .works-grid {
         grid-template-columns: 1fr;
+        grid-auto-rows: auto; /* 高さはコンテンツに任せる */
     }
-    .work-card.large, .work-card.medium {
+    .work-card.large,
+    .work-card.medium,
+    .work-card.normal {
         grid-column: span 1;
+        grid-row: span 1;
+        min-height: 240px; /* 最低限の高さを確保 */
     }
     .hero-title {
         font-size: clamp(2.5rem, 12vw, 4rem);
     }
     .tenet-layout, .br-layout, .zg-layout {
         flex-direction: column;
-        padding: 0 20px;
-        text-align: center;
-        gap: 2rem;
+        padding: 0 24px;
+        text-align: left;
+        gap: 2.5rem;
     }
     .tenet-info, .br-info, .zg-text-column, .zg-content-side {
         flex: none;
         width: 100%;
-        text-align: center;
+        text-align: left;
     }
     .tenet-visual, .br-visual {
         padding: 0;
@@ -576,8 +1216,7 @@ footer {
     height: 100vh;
     overflow: hidden;
     pointer-events: none;
-    z-index: 1000;
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.85);
     font-family: 'Inter', monospace;
     text-transform: uppercase;
     transition: opacity 0.3s ease;
@@ -595,6 +1234,17 @@ footer {
 .top-right { top: 20px; right: 20px; border-right: 2px solid rgba(0,0,0,0.1); border-top: 2px solid rgba(0,0,0,0.1); align-items: flex-end; }
 .bottom-left { bottom: 20px; left: 20px; border-left: 2px solid rgba(0,0,0,0.1); border-bottom: 2px solid rgba(0,0,0,0.1); }
 .bottom-right { bottom: 20px; right: 20px; border-right: 2px solid rgba(0,0,0,0.1); border-bottom: 2px solid rgba(0,0,0,0.1); align-items: flex-end; }
+
+@media (max-width: 600px) {
+    .hud-corner {
+        padding: 15px;
+        border: none !important; /* 角の線を消してスッキリさせる */
+        font-size: 0.6rem;
+    }
+    .bottom-right {
+        display: none; /* 情報量が多いので一つ隠す */
+    }
+}
 
 #hud-key-inventory {
     display: flex;
@@ -779,8 +1429,9 @@ footer {
 .zg-layout {
     display: flex;
     width: 100%;
-    max-width: 1000px;
-    padding: 0 60px;
+    max-width: 1400px;
+    padding: 0 80px;
+    gap: 4rem;
     align-items: flex-start;
     z-index: 2;
     position: relative;
@@ -823,7 +1474,7 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    text-align: right;
+    text-align: left;
     padding-top: 6rem;
 }
 
@@ -837,8 +1488,9 @@ footer {
 .tenet-layout, .br-layout {
     display: flex;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1400px;
     padding: 0 80px;
+    gap: 4rem;
     align-items: center;
     position: relative;
     z-index: 2;
@@ -884,8 +1536,9 @@ footer {
     right: 0;
     pointer-events: none;
     z-index: 10;
-    transform: scale(3.0);
+    transform: scale(4.2);
     transform-origin: top right;
+    opacity: 0;
 }
 
 .tenet-p, .br-p {
@@ -907,7 +1560,7 @@ footer {
 
 .br-info {
     flex: 0 0 450px;
-    text-align: right;
+    text-align: left;
 }
 .cinematic-image-container {
     position: relative;
@@ -948,7 +1601,7 @@ footer {
 
 .br-info {
     flex: 0 0 450px;
-    text-align: right;
+    text-align: left;
 }
 
 #section-tenet { cursor: ns-resize; }
@@ -993,6 +1646,50 @@ footer {
     gap: 3rem;
     position: relative;
     z-index: 2;
+}
+
+/* Adventure section needs overflow hidden for clipper etc. */
+#section-adventure {
+    overflow: hidden;
+}
+
+/* How-to-play block */
+.adv-howto {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: rgba(0,0,0,0.6);
+    line-height: 1.8;
+}
+
+.adv-howto-header {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+}
+
+/* Adventure game canvas */
+#gameCanvas {
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    transform: scaleY(-1);
+}
+
+/* Adventure overlay ready text */
+.adv-ready-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+}
+
+/* Quartz key display */
+#quartz-key-container {
+    min-height: 60px;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .adventure-info {
@@ -1230,5 +1927,297 @@ footer {
 @media (max-width: 1100px) {
     .todo-paper {
         display: none; /* Hide on smaller screens to avoid overlapping the canvas */
+    }
+}
+
+/* --- Miyabi Section (Slideshow) --- */
+#section-miyabi {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Content overlay (text + label) positioned above slideshow */
+.miyabi-content {
+    position: relative;
+    z-index: 10;
+}
+
+/* White text overrides for miyabi dark background */
+#section-miyabi .br-title {
+    color: #fff;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+#section-miyabi .br-p {
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+#section-miyabi .br-stats {
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+}
+
+#section-miyabi .cinematic-label {
+    color: rgba(255,255,255,0.4);
+}
+
+.miyabi-slideshow {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.card-visual-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.card-visual {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.2;
+    transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-visual.no-image {
+    background: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0,0,0,0.06);
+    font-family: 'Inter', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.5rem;
+    user-select: none;
+}
+
+.m-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: crossfade 15s linear infinite;
+    transform: scale(1.05); /* Slight zoom for Ken Burns effect */
+}
+
+.m-slide:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.m-slide:nth-child(2) {
+    animation-delay: 5s;
+}
+
+.m-slide:nth-child(3) {
+    animation-delay: 10s;
+}
+
+.miyabi-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        45deg,
+        rgba(0,0,0,0.7) 0%,
+        rgba(0,0,0,0.3) 50%,
+        rgba(0,0,0,0.7) 100%
+    );
+    z-index: 2;
+    pointer-events: none;
+}
+
+@keyframes crossfade {
+    0% { opacity: 0; transform: scale(1.05); }
+    5% { opacity: 1; }
+    33% { opacity: 1; }
+    38% { opacity: 0; transform: scale(1.1); }
+    100% { opacity: 0; }
+}
+
+.br-layout {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.br-info {
+    max-width: 600px;
+}
+
+.br-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.br-p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.br-stats {
+    display: flex;
+    gap: 2rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    padding: 1rem 0;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.br-stats span {
+    letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+    .br-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* --- Link System Banners --- */
+.link-banner-container {
+    margin: 2.5rem 0;
+    width: 100%;
+}
+
+.link-banner-inner {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-top: 1px solid rgba(0,0,0,0.1);
+    border-left: 8px solid var(--accent-color, #000);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.link-banner-inner:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    background: #fff;
+    border-color: rgba(0,0,0,0.1);
+}
+
+.lb-image {
+    width: 280px;
+    min-height: 180px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    flex-shrink: 0;
+    border-right: 1px solid rgba(0,0,0,0.05);
+}
+
+.lb-content {
+    flex: 1;
+    padding: 1.8rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.lb-header {
+    display: flex;
+    gap: 1.5rem;
+    font-family: monospace;
+    font-size: 0.65rem;
+    color: rgba(0,0,0,0.4);
+    margin-bottom: 1.2rem;
+}
+
+.lb-tag {
+    color: var(--accent-color);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+.lb-protocol {
+    opacity: 0.6;
+}
+
+.lb-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.6rem;
+    color: #000;
+}
+
+.lb-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 550px;
+}
+
+.lb-footer {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed rgba(0,0,0,0.08);
+    padding-top: 1.2rem;
+}
+
+.lb-url {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: rgba(0,0,0,0.4);
+    letter-spacing: 0.05em;
+}
+
+.lb-arrow {
+    transition: all 0.3s ease;
+    color: var(--accent-color);
+    opacity: 0.5;
+}
+
+.link-banner-inner:hover .lb-arrow {
+    transform: translate(4px, -4px);
+    opacity: 1;
+}
+
+@media (max-width: 850px) {
+    .link-banner-inner {
+        flex-direction: column;
+    }
+    .lb-image {
+        width: 100%;
+        height: 200px;
+    }
+    .lb-content {
+        padding: 1.5rem;
     }
 }
