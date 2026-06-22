@@ -18,7 +18,7 @@
             this.totalFrames = 300;
             this.currentFrame = 299;
             this.targetFrame = 299;
-            this.epicenterOffset = { x: 0, y: 2.5 }; // 爆発の中心位置オフセット（spacing単位）
+            this.epicenterOffset = { x: 1.0, y: 2.5 }; // 爆発の中心位置オフセット（spacing単位）
 
             ({ Engine, Bodies, Body, World, Vector } = window.Matter);
             this.init();
@@ -258,7 +258,7 @@
             if (this.targetFrame === 0) {
                 // 逆再生時：最初の40% (300から180) は爆速、残りの60% (180から0) は等速
                 if (this.currentFrame > this.totalFrames * 0.6) {
-                    speed = 18.0; 
+                    speed = 5.0; 
                 }
             }
             // もう5日前のロジックだからね　いい加減覚えてない　LLMさまさますぎる

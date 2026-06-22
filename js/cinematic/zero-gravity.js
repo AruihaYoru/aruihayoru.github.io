@@ -58,6 +58,11 @@
             this._wheelHandler = (e) => this.handleWheel(e);
             window.addEventListener('wheel', this._wheelHandler, { passive: false });
 
+            // スクロール同期: lastScrollY を安定化させる
+            window.addEventListener('scroll', () => {
+                this.lastScrollY = window.scrollY;
+            }, { passive: true });
+
             // マウスムーブ: セクションがアクティブなときのみ更新
             window.addEventListener('mousemove', (e) => {
                 if (!this.isActive) return;
@@ -177,7 +182,7 @@
 
             // === Verlet物理 ===
             const SPRING_K   = 0.012;   // スプリング定数（弱め）
-            const FRICTION    = 0.88;    // 摩擦（高めで素早く減衰）
+            const FRICTION    = 0.80;    // 摩擦（強めで素早く減衰）
             const MAX_SPEED   = 8.0;     // ノード最大速度
             const DRIFT_AMP_X = 0.025;   // ドリフト振幅（穏やか）
             const DRIFT_AMP_Y = 0.018;
